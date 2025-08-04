@@ -1,9 +1,11 @@
+'use client'
 import EmailForm from "@/components/forms/EmailForm";
 import PhoneForm from "@/components/forms/PhoneForm";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 
 import { Box, Icon, Flex, Text, Heading, Tabs } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { CiMail } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";

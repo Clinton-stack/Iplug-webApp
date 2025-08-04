@@ -25,10 +25,10 @@ const PhoneForm = () => {
         borderRadius="md"
       />
       <Heading as="h1" size="lg" mb={2} color="#011948">
-        What’s your Phone Number?
+        What&apos;s your Phone Number?
       </Heading>
       <Text fontSize="sm" color="gray.600" mb={6}>
-        We’ll send a one time pass code to help you verify your Phone Number
+        We&apos;ll send a one time pass code to help you verify your Phone Number
       </Text>
       <Box mb={6} w='100%'>
         <PhoneInput

@@ -22,6 +22,7 @@ const Layout = ({ children }) => {
                   alt="Ingeniousplug logo"
                   height={50}
                   width={150}
+                  style={{ height: 'auto' }}
                   priority
                 />
               </Link>

@@ -23,11 +23,11 @@ const EmailForm = () => {
       </Icon>
 
       <Heading as="h1" size="lg" mb={2} color="#011948">
-        What's your email?
+        What&apos;s your email?
       </Heading>
 
       <Text fontSize="sm" color="gray.600" mb={6}>
-        We'll send a one time pass code to help you verify your email
+        We&apos;ll send a one time pass code to help you verify your email
       </Text>
 
       <Box w='100%' mt={6}>

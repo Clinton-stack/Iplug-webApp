@@ -38,7 +38,7 @@ const BusinessForm = () => {
         p={2}
       />
       <Heading as="h1" size="lg" mb={2} color="#011948">
-        Lets get to know you and verify your identity
+        Let&apos;s get to know you and verify your identity
       </Heading>
       <Text fontSize="sm" color="gray.600" mb={6}>
         Business Owner

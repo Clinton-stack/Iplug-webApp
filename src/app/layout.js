@@ -51,8 +51,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${dmSans.variable} ${mulish.variable} antialiased`}>
+    <html lang="en" className="debug-hydration" style={{colorScheme:"light"}}>
+      <body className={`${dmSans.variable} ${mulish.variable}`}>
         <Provider>{children}</Provider>
       </body>
     </html>

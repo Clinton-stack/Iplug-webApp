@@ -4,6 +4,8 @@ import { Box, Flex, Heading, Icon, Text } from "@chakra-ui/react";
 import { BiUser } from "react-icons/bi";
 
 import React, { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const items = [
   {
@@ -21,19 +23,8 @@ const StepFive = () => {
   const router = useRouter();
   const [selected, setSelected] = useState("individual");
   return (
-    <Flex
-      mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }}
-      w="100%"
-      align="center"
-      direction="column"
-    >
-      <Icon
-        boxSize={12}
-        color="#011948"
-        border="1px solid #011948"
-        p={2}
-        mb={4}
-      >
+    <Flex mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }} w="100%" align="center" direction="column">
+      <Icon boxSize={12} color="#011948" border="1px solid #011948" p={2} mb={4}>
         <BiUser />
       </Icon>
 
@@ -47,19 +38,13 @@ const StepFive = () => {
 
       <Flex wrap="wrap" justify="center" gap="1rem">
         {items.map((item) => (
-          <button
-            key={item.value}
-            onClick={() => setSelected(item.value)}
-            className={`userTypeButton ${
-              selected === item.value ? "selected" : ""
-            }`}
-          >
-            <img
+          <button key={item.value} onClick={() => setSelected(item.value)} className={`userTypeButton ${selected === item.value ? "selected" : ""}`}>
+            <Image
               src={item.image}
               alt={item.title}
+              width={40}
+              height={40}
               style={{
-                width: "40px",
-                height: "40px",
                 borderRadius: "50%",
                 objectFit: "cover",
               }}
@@ -72,7 +57,7 @@ const StepFive = () => {
       </Flex>
 
       <Box mt={6} w="100%" maxW="550px">
-        <PrimaryButton name="Next" bgColor="#006BFF" onClick= {()=> router.push('/register/step-six')}/>
+        <PrimaryButton name="Next" bgColor="#006BFF" onClick={() => router.push("/register/step-six")} />
       </Box>
     </Flex>
   );

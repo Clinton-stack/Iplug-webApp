@@ -26,20 +26,8 @@ const StepOne = () => {
   const router = useRouter();
 
   return (
-    <Flex
-      mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }}
-      w="100%"
-      align="center"
-      direction="column"
-    >
-      <Icon
-        as={TbUserQuestion}
-        boxSize={12}
-        color="#011948"
-        border="1px solid #011948"
-        p={2}
-        mb={4}
-      />
+    <Flex mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }} w="100%" align="center" direction="column">
+      <Icon as={TbUserQuestion} boxSize={12} color="#011948" border="1px solid #011948" p={2} mb={4} />
 
       <Heading as="h1" size="lg" mb={2} color="#011948">
         Who are you signing up as?
@@ -51,13 +39,7 @@ const StepOne = () => {
 
       <Flex wrap="wrap" justify="center" gap="1rem">
         {items.map((item) => (
-          <button
-            key={item.value}
-            onClick={() => setSelected(item.value)}
-            className={`userTypeButton ${
-              selected === item.value ? "selected" : ""
-            }`}
-          >
+          <button key={item.value} onClick={() => setSelected(item.value)} className={`userTypeButton ${selected === item.value ? "selected" : ""}`}>
             <img
               src={item.image}
               alt={item.title}
@@ -77,11 +59,7 @@ const StepOne = () => {
       </Flex>
 
       <Box w="100%" maxW="550px" mt={6}>
-        <PrimaryButton
-          bgColor="#006BFF"
-          name="Next"
-          onClick={() => router.push("/register/step-two")}
-        />
+        <PrimaryButton bgColor="#006BFF" name="Next" onClick={() => router.push("/register/step-two")} />
       </Box>
     </Flex>
   );

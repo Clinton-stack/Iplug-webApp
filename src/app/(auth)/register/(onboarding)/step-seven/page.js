@@ -1,12 +1,13 @@
+"use client";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Box, Heading, Icon, NativeSelect, Text } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 import { PiRocketBold } from "react-icons/pi";
 
 
 const StepSeven = () => {
-  
-
+  const router = useRouter();
   return (
     <Box
       w={{ base: "90%", sm: "400px", md: "500px" }}

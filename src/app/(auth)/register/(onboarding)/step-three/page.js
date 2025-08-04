@@ -71,7 +71,7 @@ const StepThree = () => {
         className="already-have-account-text"
         mb={10}
       >
-        Didn't receive a code?{"  "}
+        Didn&lsquo;t receive a code?{"  "}
         <Link href="/login" className="link-text">
           Click to resend
         </Link>

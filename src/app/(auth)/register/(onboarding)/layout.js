@@ -22,15 +22,9 @@ const layout = ({ children }) => {
             flexDirection="column"
           >
             <Box mb={20}>
-              <Image
-                src="/images/IngeniousplugLogo.png"
-                alt="Ingeniousplug logo"
-                height={50}
-                width={150}
-                priority
-              />
+              <Image src="/images/IngeniousplugLogo.png" alt="Ingeniousplug logo" height={50} width={150} style={{ height: "auto" }} priority />
             </Box>
-            <ProgressStepper  />
+            <ProgressStepper />
             <Box mt="auto">
               <Text className="already-have-account-text" mt="10px">
                 Already have an account?{"  "}
@@ -42,13 +36,7 @@ const layout = ({ children }) => {
           </Box>
         </div>
         <div className="col-12 col-md-7 col-lg-8 ">
-          <Flex
-            h="100vh"
-            align="center"
-            justify="center"
-            px={2}
-            pos="relative"
-          >
+          <Flex h="100vh" align="center" justify="center" px={2} pos="relative">
             {children}
 
             <Box
@@ -62,11 +50,12 @@ const layout = ({ children }) => {
               bgColor="#FAFAFA"
               rounded={"xl"}
             >
-              <img
+              <Image
                 src="/images/background/people-tiles.png"
                 alt="User collage"
+                fill
+                priority
                 style={{
-                  width: "100%",
                   objectFit: "cover",
                   objectPosition: "top",
                 }}

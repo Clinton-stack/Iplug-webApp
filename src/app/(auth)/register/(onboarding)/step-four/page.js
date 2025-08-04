@@ -1,6 +1,8 @@
+"use client";
 import PasswordField from "@/components/ui/PasswordField";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Box, Em, Heading, Icon, PinInput, Text } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { RiLock2Line } from "react-icons/ri";
 
 const StepThree = () => {

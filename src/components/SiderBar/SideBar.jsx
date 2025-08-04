@@ -16,7 +16,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       w={collapsed ? "70px" : "260px"}
       transition="all 0.3s ease-in-out"
       h="100vh"
-      // boxShadow="md"
       position="fixed"
       bg="linear-gradient(to bottom, #3BA3F5 0%, #197FCF 40%)"
     >
