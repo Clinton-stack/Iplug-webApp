@@ -7,7 +7,7 @@ import React from "react";
 const ForgotPassword = () => {
   return (
     <div>
-      <h1> Can't remember your password </h1>
+      <h1> Can&apos;t remember your password </h1>
       <p>
         Type the email associated with your account below and we&apos;ll send you
         instructions to help recover your account

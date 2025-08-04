@@ -9,6 +9,7 @@ import { CiMail } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 
 const StepTwo = () => {
+  const router = useRouter();
   return (
     <Flex
       w="100%"
@@ -40,7 +41,7 @@ const StepTwo = () => {
         </Tabs.Content>
 
         <Box w={"100%"} mt={6}>
-          <PrimaryButton name="Next" bgColor="#006BFF" />
+          <PrimaryButton name="Next" bgColor="#006BFF" onClick= {()=> router.push('/register/step-three')}/>
         </Box>
 
         <Text

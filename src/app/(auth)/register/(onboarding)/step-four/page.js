@@ -4,6 +4,7 @@ import { Box, Em, Heading, Icon, PinInput, Text } from "@chakra-ui/react";
 import { RiLock2Line } from "react-icons/ri";
 
 const StepThree = () => {
+  const router = useRouter();
   return (
     <Box
       w='100%'
@@ -38,7 +39,7 @@ const StepThree = () => {
         />
       </Box>
 
-      <PrimaryButton name="Next" bgColor="#006BFF" />
+      <PrimaryButton name="Next" bgColor="#006BFF" onClick= {()=> router.push('/register/step-five')}/>
     </Box>
   );
 };

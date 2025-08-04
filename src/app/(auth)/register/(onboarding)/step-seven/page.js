@@ -40,7 +40,7 @@ const StepSeven = () => {
         </Text>
       </Box>
 
-      <PrimaryButton name="Lets Go" bgColor="#006BFF" />
+      <PrimaryButton name="Lets Go" bgColor="#006BFF" onClick= {()=> router.push('/home')}/>
     </Box>
   );
 };

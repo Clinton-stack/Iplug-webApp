@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { BsHash } from "react-icons/bs";
 
-const StepTwo = () => {
+const StepThree = () => {
   const router = useRouter();
   return (
     <Box
@@ -93,4 +93,4 @@ const StepTwo = () => {
   );
 };
 
-export default StepTwo;
+export default StepThree;

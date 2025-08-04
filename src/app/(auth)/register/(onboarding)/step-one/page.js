@@ -21,7 +21,7 @@ const items = [
   },
 ];
 
-const Page = () => {
+const StepOne = () => {
   const [selected, setSelected] = useState("requester");
   const router = useRouter();
 
@@ -87,4 +87,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default StepOne;

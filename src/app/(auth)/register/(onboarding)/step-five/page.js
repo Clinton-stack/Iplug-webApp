@@ -17,7 +17,8 @@ const items = [
     image: "/images/provider.png",
   },
 ];
-const page = () => {
+const StepFive = () => {
+  const router = useRouter();
   const [selected, setSelected] = useState("individual");
   return (
     <Flex
@@ -71,10 +72,10 @@ const page = () => {
       </Flex>
 
       <Box mt={6} w="100%" maxW="550px">
-        <PrimaryButton name="Next" bgColor="#006BFF" />
+        <PrimaryButton name="Next" bgColor="#006BFF" onClick= {()=> router.push('/register/step-six')}/>
       </Box>
     </Flex>
   );
 };
 
-export default page;
+export default StepFive;
