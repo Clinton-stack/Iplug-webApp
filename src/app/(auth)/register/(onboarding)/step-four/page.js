@@ -26,7 +26,7 @@ const StepThree = () => {
       </Heading>
 
       <Text fontSize="sm" color="gray.600" mb={6}>
-        Great job so far! Now, 😄 let's set up a secure password for your
+        Great job so far! Now, 😄 let&apos;s set up a secure password for your
         account.
       </Text>
 

@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     <div>
       <h1> Can't remember your password </h1>
       <p>
-        Type the email associated with your account below and we’ll send you
+        Type the email associated with your account below and we&apos;ll send you
         instructions to help recover your account
       </p>
       <Stack gap={20} mt="25px">
@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         <PrimaryButton name="Reset password" bgColor="#006BFF" />
 
         <Text className="already-have-account-text" mt="40px">
-          Dont have an account?{"  "}
+          Dont have an account?
           <Link href="/register" className="link-text">
             Sign up
           </Link>

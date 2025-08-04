@@ -31,7 +31,7 @@ const StepTwo = () => {
       </Heading>
 
       <Text fontSize="sm" color="gray.600" mb={6}>
-        We've sent a 6-digit one time passcode to your email. Please enter it
+        We&apos;ve sent a 6-digit one time passcode to your email. Please enter it
         below to verify your email address.
       </Text>
 

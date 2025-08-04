@@ -17,7 +17,7 @@ const PasswordField = ({name, label, isRequired, error  }) => {
         rounded="lg"
         css={{ "--focus-color": "#006BFF" }}
       />
-    {error && <Field.ErrorMessage>{error}</Field.ErrorMessage>}
+    {error && <Field.ErrorText>{error}</Field.ErrorText>}
 
     </Field.Root>
   );

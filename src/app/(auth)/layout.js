@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const layout = ({ children }) => {
+const Layout = ({ children }) => {
   const pathname = usePathname();
   const isRegisterStep = pathname?.startsWith('/register/step');
   if (isRegisterStep) return  <>{children}</>
@@ -52,4 +52,4 @@ const layout = ({ children }) => {
   );
 };
 
-export default layout;
+export default Layout;

@@ -26,17 +26,17 @@ const StepSeven = () => {
         Welcome onboard Plug! 😄
       </Text>
       <Heading as="h1" size="lg" mb={10} color="#011948">
-        We're thrilled to have you join us, {"John Doe"}!
+        We&apos;re thrilled to have you join us, {"John Doe"}!
       </Heading>
 
       <Box textAlign='left'>
         <Text fontSize="sm" color="gray.600" mb={6}>
-          Before you dive into the vast ocean of opportunities that await, let's
+          Before you dive into the vast ocean of opportunities that await, let&apos;s
           fine-tune your profile.
         </Text>
         <Text fontSize="sm" color="gray.600" mb={20}>
-          By selecting an interest, and taking a career assessment you're
-          enabling us to tailor a journey that's as unique as you are.
+          By selecting an interest, and taking a career assessment you&apos;re
+          enabling us to tailor a journey that&apos;s as unique as you are.
         </Text>
       </Box>
 

@@ -4,7 +4,7 @@ import AppSidebar from '@/components/SiderBar/SideBar'
 import { Grid, GridItem } from '@chakra-ui/react'
 import React, { useState } from 'react'
 
-const layout = ({children}) => {
+const Layout = ({children}) => {
     const [collapsed, setCollapsed] = useState(false);
   return (
     <Grid
@@ -38,4 +38,4 @@ const layout = ({children}) => {
   )
 }
 
-export default layout
+export default Layout
