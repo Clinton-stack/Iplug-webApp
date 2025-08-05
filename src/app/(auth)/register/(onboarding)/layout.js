@@ -6,7 +6,7 @@ import React from "react";
 
 const layout = ({ children }) => {
   return (
-    <Box h="100vh">
+    <Box h="100vh" overflow='hidden'>
       <div className="row">
         <div className="d-none d-lg-block d-md-block col-lg-4 col-md-5 !p-8 ">
           <Box
@@ -15,14 +15,14 @@ const layout = ({ children }) => {
             bgRepeat="no-repeat"
             bgSize="contain"
             bgPos="bottom"
-            h="90vh"
             rounded="xl"
             p={5}
+            mb={10}
             display="flex"
             flexDirection="column"
           >
-            <Box mb={20}>
-              <Image src="/images/IngeniousplugLogo.png" alt="Ingeniousplug logo" height={50} width={150} style={{ height: "auto" }} priority />
+            <Box mb={6}>
+              <Image src="/images/IngeniousplugLogo.png" alt="Ingeniousplug logo" height={50} width={130} style={{ height: "auto" }} priority />
             </Box>
             <ProgressStepper />
             <Box mt="auto">
@@ -36,8 +36,12 @@ const layout = ({ children }) => {
           </Box>
         </div>
         <div className="col-12 col-md-7 col-lg-8 ">
-          <Flex h="100vh" align="center" justify="center" px={2} pos="relative">
+          <Flex h="100vh" align="center" justify="center" px={2} pos="relative"   pb={{ base: "130px", sm: "180px", md: "160px", lg: "230px" }} 
+          >
+            <Box zIndex={2}>
             {children}
+
+            </Box>
 
             <Box
               position="absolute"

@@ -39,13 +39,16 @@ const PhoneForm = () => {
             width: "100%",
             height: "48px",
             fontSize: "16px",
-            borderRadius: "8px",
+            borderRadius: "10px",
             border: "1px solid #E2E8F0",
             paddingLeft: "48px",
+            background:"transparent",
           }}
           buttonStyle={{
             border: "1px solid #E2E8F0",
-            backgroundColor: "white",
+            backgroundColor: "#FAFAFA",
+            borderRadius: "10px",
+
           }}
           containerStyle={{
             width: "100%",

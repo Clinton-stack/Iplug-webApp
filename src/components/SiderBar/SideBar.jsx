@@ -64,7 +64,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                         borderEnd="none"
                         cursor="pointer"
                         bg={isActive ? "#f5f5f5" : "transparent"}
-                        // _hover={{ bg: "#f5f5f5", color: "#012949" }}
                         color={isActive ? "#012949" : "white"}
                         _hover={{
                           color: "#012949",
@@ -108,7 +107,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
                         <Box fontSize={collapsed ? "2xl" : "md"}>{item.icon}</Box>
 
                         {!collapsed && (
-                          <Text ml={3} fontSize="sm" fontWeight="medium">
+                          <Text ml={3} fontSize="sm" fontWeight="bold">
                             {item.label}
                           </Text>
                         )}

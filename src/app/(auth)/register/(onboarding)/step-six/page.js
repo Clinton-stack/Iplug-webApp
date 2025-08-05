@@ -10,7 +10,6 @@ const StepSix = () => {
   const [userType, setUserType] = useState("individual"); 
   return (
     <Flex
-      mb={{ base: "110px", sm: "130px", md: "200px", lg: "200px" }}
       w="100%"
       align="center"
       direction="column"

@@ -17,15 +17,14 @@ const StepTwo = () => {
       w="100%"
       align="center"
       direction="column"
-      mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }}
     >
       <Tabs.Root
         defaultValue="email"
         orientation="horizontal"
-        style={{ width: "100%", maxWidth: "500px" }}
+        style={{ width: "100%", maxWidth: "500px"}}
         variant="enclosed"
       >
-        <Tabs.List display="flex" justifyContent="center" mb={4}>
+        <Tabs.List display="flex" justifyContent="center" mb={4} bgColor='#FAFAFA'>
           <Tabs.Trigger value="email" className="tab-trigger">
             <CiMail /> Email
           </Tabs.Trigger>

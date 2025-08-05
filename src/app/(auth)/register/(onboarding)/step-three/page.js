@@ -12,9 +12,8 @@ const StepThree = () => {
     <Box
       w="100%"
       maxW="550px"
-      p={8}
+      p={{base: 0, md: 4, lg: 8}}
       textAlign="center"
-      mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }}
     >
       <Icon
         boxSize={12}
@@ -38,30 +37,41 @@ const StepThree = () => {
       <Box>
         <Box mb={10}>
           <PinInput.Root>
-            <PinInput.Control>
+            <PinInput.Control >
               <PinInput.Input
                 index={0}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
               />
               <PinInput.Input
                 index={1}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
+
               />
               <PinInput.Input
                 index={2}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
+
               />
               <PinInput.Input
                 index={3}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
+
               />
               <PinInput.Input
                 index={4}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
+
               />
               <PinInput.Input
                 index={5}
                 className="pin-input"
+                width={{ base: "40px", md: "50px", lg: "80px" }}
+
               />
             </PinInput.Control>
           </PinInput.Root>

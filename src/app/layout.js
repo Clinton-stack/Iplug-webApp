@@ -1,6 +1,10 @@
 import { DM_Sans, Mulish } from "next/font/google";
 import "./globals.css";
 import { Provider } from "@/components/ui/provider";
+import "swiper/css";
+import "swiper/css/pagination";
+import 'swiper/css/navigation';
+
 
 const dmSans = DM_Sans({
   subsets: ["latin"],

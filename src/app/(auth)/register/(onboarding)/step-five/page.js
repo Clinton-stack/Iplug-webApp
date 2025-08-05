@@ -23,7 +23,7 @@ const StepFive = () => {
   const router = useRouter();
   const [selected, setSelected] = useState("individual");
   return (
-    <Flex mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }} w="100%" align="center" direction="column">
+    <Flex  w="100%" align="center" direction="column">
       <Icon boxSize={12} color="#011948" border="1px solid #011948" p={2} mb={4}>
         <BiUser />
       </Icon>

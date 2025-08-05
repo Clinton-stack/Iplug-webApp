@@ -1,23 +1,6 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Icon,
-  Image,
-  Input,
-  InputGroup,
-  Menu,
-  Portal,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Icon, Image, Input, InputGroup, Menu, Portal, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import {
-  FaChevronDown,
-  FaDollarSign,
-  FaEuroSign,
-  FaPoundSign,
-} from "react-icons/fa";
+import { FaChevronDown, FaDollarSign, FaEuroSign, FaPoundSign } from "react-icons/fa";
 import { HiOutlineBell } from "react-icons/hi";
 import { LuMessageSquareMore, LuSearch } from "react-icons/lu";
 import { PiCurrencyNgnDuotone } from "react-icons/pi";
@@ -35,26 +18,18 @@ const Navbar = () => {
   const selectedCurrency = currencies.find((c) => c.label === currency);
 
   return (
-    <Flex align="center" h="100%">
+    <Flex align="center" justify="space-between" h="70px" w="full" px={4} bg="#F8FAFB" boxShadow="xs">
       <InputGroup flex="1" startElement={<LuSearch />}>
-        <Input
-          placeholder="Search"
-          borderRadius="full"
-          maxW="450px"
-          bgColor="#f5f5f5"
-        />
+        <Input placeholder="Search" borderRadius="full" maxW="450px" bgColor="#f5f5f5" />
       </InputGroup>
 
       <Flex align="center" gap={5} ml={2}>
-        <Icon size="lg" color="#197FCF">
-          <LuMessageSquareMore />
-        </Icon>
-        <Icon size="lg" color="#197FCF">
-          <HiOutlineBell />
-        </Icon>
-        <Menu.Root onSelect={(e) => setCurrency(e.value)} >
-          <Menu.Trigger asChild >
-            <Button variant="outline" borderRadius="full" color='gray.500'>
+        <Icon boxSize={5} color="#197FCF" as={LuMessageSquareMore} />
+        <Icon boxSize={5} color="#197FCF" as={HiOutlineBell} />
+
+        <Menu.Root onSelect={(e) => setCurrency(e.value)}>
+          <Menu.Trigger asChild>
+            <Button variant="outline" borderRadius="full" color="gray.500">
               <HStack spacing={2}>
                 {selectedCurrency?.icon}
                 <Text>{selectedCurrency?.label}</Text>
@@ -77,14 +52,9 @@ const Navbar = () => {
             </Menu.Positioner>
           </Portal>
         </Menu.Root>
+
         <Flex align="center">
-          <Image
-            src={"/images/provider.png"}
-            h="20px"
-            borderRadius="full"
-            alt="Profile picture"
-            mr={2}
-          />
+          <Image src="/images/provider.png" h="20px" borderRadius="full" alt="Profile picture" mr={2} />
 
           <Box>
             <Text fontSize="15px" color="gray.700">

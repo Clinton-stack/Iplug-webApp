@@ -5,12 +5,10 @@ import {
   FaUser,
   FaEnvelope,
   FaBuilding,
-  FaSmile,
 } from "react-icons/fa";
 import { PiRocketBold } from "react-icons/pi";
 import { BsHash } from "react-icons/bs";
-import { MdWorkOutline } from "react-icons/md";
-import { LuUserRound } from "react-icons/lu";
+
 import { TbUserQuestion } from "react-icons/tb";
 
 import { usePathname } from "next/navigation";
@@ -108,7 +106,7 @@ export default function ProgressStepper() {
   }));
 
   return (
-    <VStack spacing={10} align="stretch" position="relative" pl={4}>
+    <VStack spacing={10} align="stretch" position="relative" pl={4} maxH='100%' pb={0}>
       {steps.map((step, i) => (
         <Box key={i} spaceY={10} position="relative">
           <HStack align="flex-start">
@@ -122,11 +120,11 @@ export default function ProgressStepper() {
             <Box>
               <Text
                 fontWeight={step.status === "active" ? "bold" : "normal"}
-                fontSize="sm"
+                fontSize="14px"
               >
                 {step.title}
               </Text>
-              <Text fontSize="xs" color="gray.500">
+              <Text fontSize="11px" color="gray.500">
                 {step.subtitle}
               </Text>
             </Box>

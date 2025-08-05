@@ -5,7 +5,7 @@ import React from "react";
 const IngeniousPay = () => {
   return (
     <Box w="100%" h="100%">
-      <Text fontSize="clamp(18px, 1.5vw, 24px)" fontWeight="bold" color="gray.900" mb={4}>
+      <Text fontSize="lg" fontWeight="bold" color="gray.900" mb={4}>
         IngeniousPay
       </Text>
       <Flex direction="column" justifyContent="space-between" alignItems="center" h="100%">
@@ -14,7 +14,7 @@ const IngeniousPay = () => {
             <Text fontSize="clamp(12px, 1.2vw, 14px)" color="gray.500">
               Available Balance
             </Text>
-            <Text fontSize="clamp(20px, 2.0vw, 28px)" fontWeight="bold" color="gray.800">
+            <Text fontSize="clamp(20px, 2.0vw, 22px)" fontWeight="bold" color="green">
               $75,000.00
             </Text>
           </Box>
@@ -23,7 +23,7 @@ const IngeniousPay = () => {
             <Text fontSize="clamp(12px, 1.2vw, 14px)" color="gray.500">
               Funds in Escrow
             </Text>
-            <Text fontSize="clamp(20px, 2.0vw, 28px)" fontWeight="bold" color="gray.800">
+            <Text fontSize="clamp(20px, 2.0vw, 22px)" fontWeight="bold" color="gray.800">
               $25,000.00
             </Text>
           </Box>

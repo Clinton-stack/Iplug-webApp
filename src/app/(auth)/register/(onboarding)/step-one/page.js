@@ -26,7 +26,7 @@ const StepOne = () => {
   const router = useRouter();
 
   return (
-    <Flex mb={{ base: "110px", sm: "130px", md: "200px", lg: "300px" }} w="100%" align="center" direction="column">
+    <Flex w="100%" align="center" direction="column" textAlign={{base: "center", lg:"left"}}>
       <Icon as={TbUserQuestion} boxSize={12} color="#011948" border="1px solid #011948" p={2} mb={4} />
 
       <Heading as="h1" size="lg" mb={2} color="#011948">

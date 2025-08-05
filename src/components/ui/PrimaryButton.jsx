@@ -5,7 +5,7 @@ import tinycolor from "tinycolor2";
 const PrimaryButton = ({ name, bgColor, icon, onClick, ...props }) => {
     const hoverColor = tinycolor(bgColor).darken(10).toString();
   return (
-    <Button rounded="xl" background={bgColor} size="md" className="button-text" _hover={{background: hoverColor}} w='100%' onClick={onClick} {...props} >
+    <Button rounded="xl" background={bgColor} size="md" className="button-text" _hover={{background: hoverColor}} w='100%' onClick={onClick} {...props} fontSize='14px'  color="white" fontWeight='bold'>
       {icon}{name}
     </Button>
   );
