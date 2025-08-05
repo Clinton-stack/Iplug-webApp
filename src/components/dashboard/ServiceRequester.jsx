@@ -28,7 +28,7 @@ const ServiceRequester = () => {
               <ActiveProjectsCard />
             </Box>
             <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
-              Spend Last 6 Months
+              Spending 
             </Box>
           </Flex>
 
@@ -48,12 +48,12 @@ const ServiceRequester = () => {
       <GridItem colSpan={{ base: 12, lg: 3 }}>
         <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(6, 1fr)", lg: "repeat(1, 1fr)" }} gap={6}>
           <GridItem colSpan={{ base: 12, md: 3 }}>
-            <Box className="dashboard-tile" minHeight="280px">
+            <Box className="dashboard-tile" minHeight="200px">
               <IngeniousPay />
             </Box>
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 3 }}>
-            <Box className="dashboard-tile" minHeight="280px">
+            <Box className="dashboard-tile" minHeight="200px">
               <StatsAtAGlance />
             </Box>
           </GridItem>

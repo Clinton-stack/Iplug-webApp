@@ -10,7 +10,7 @@ const StatsAtAGlance = () => {
         Stats at a Glance
       </Text>
 
-      <Grid templateColumns="repeat(2, 1fr)" gapX={4} gapY={6}>
+      <Flex gap={2} wrap='wrap'>
         {metrics.map(({ label, value, bgColor, icon }) => (
           <Flex key={label} align="flex-start" gap={3}>
             <Box
@@ -27,16 +27,16 @@ const StatsAtAGlance = () => {
             </Box>
 
             <Box>
-              <Text fontSize="sm" color="gray.500">
+              <Text fontSize="11px" color="gray.600">
                 {label}
               </Text>
-              <Text fontSize="lg" fontWeight="bold" color="gray.800">
+              <Text fontSize="md" fontWeight="bold" color="gray.800">
                 {value}
               </Text>
             </Box>
           </Flex>
         ))}
-      </Grid>
+      </Flex>
     </Box>
   );
 };
