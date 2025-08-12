@@ -11,7 +11,7 @@ const Inbox = () => {
 
       <VStack spacing={4} align="stretch">
         {messages.map((msg) => (
-          <Flex key={msg.id} align="center" gap={3} p={2} borderRadius="lg" _hover={{ bg: "gray.50" }} cursor="pointer">
+          <Flex key={msg.id} align="center" gap={3} p={2} borderRadius="lg" _hover={{ bg: "gray.100" }} cursor="pointer">
             <Avatar.Root  size="md">
               <Avatar.Fallback name={msg.sender} />
               <Avatar.Image src={msg.avatar} alt={msg.sender} />

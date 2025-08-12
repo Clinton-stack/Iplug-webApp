@@ -1,0 +1,36 @@
+import { Box, Text, Image, HStack } from "@chakra-ui/react";
+
+export default function ServiceCard({ item, role, onClick }) {
+  return (
+    <Box p={4} borderWidth="1px" rounded="md" shadow="sm" cursor="pointer" onClick={onClick}>
+      <Image src={item.image} alt={item.title} rounded="md" w="full" h={150} objectFit="fit" />
+
+      <Text fontWeight="bold" mt={2}>{item.title}</Text>
+      <Text fontSize="sm" color="gray.500">by {item.provider || item.postedBy}</Text>
+
+      {role === "requester" && (
+        <>
+          <Text fontSize="xs" color="gray.400">
+            Category: {item.category} → {item.subcategory}
+          </Text>
+          <HStack spacing={1} mt={1}>
+            <Text color="yellow.500">⭐ {item.rating}</Text>
+            <Text fontSize="xs" color="gray.500">
+              ({item.reviews} reviews)
+            </Text>
+          </HStack>
+          <Text color="green.500" fontWeight="bold" mt={1}>
+            ₦{(item.pricePerTask || item.price || 0).toLocaleString()}/task
+            {" | "}₦{(item.pricePerHour || 0).toLocaleString()}/hr
+          </Text>
+          <Text fontSize="xs" mt={1}>
+            {item.deliveries} deliveries | Languages: {item.languages?.join(", ")}
+          </Text>
+          <Text fontSize="xs" color={item.availability?.toLowerCase().includes("available") ? "green.500" : "orange.500"}>
+            {item.availability}
+          </Text>
+        </>
+      )}
+    </Box>
+  );
+}

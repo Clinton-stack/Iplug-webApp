@@ -20,7 +20,7 @@ const StatsAtAGlance = () => {
               alignItems="center"
               justifyContent="center"
               borderRadius="lg"
-              bg={bgColor.replace("bg-", "")} // converts bg-blue.100 to blue.100 for Chakra
+              bg={bgColor.replace("bg-", "")} 
               flexShrink={0}
             >
               {icon}

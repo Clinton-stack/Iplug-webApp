@@ -8,6 +8,7 @@ import UpcomingMilestones from "./dashboard-components/UpcomingMilestones";
 import StatsAtAGlance from "./dashboard-components/StatsAtAGlance";
 import RecentActivities from "./dashboard-components/RecentActivity";
 import SmartRecommendations from "./dashboard-components/SmartRecommendations";
+import ProfileCompletionTile from "./dashboard-components/ProfileCompletion";
 
 const ServiceRequester = () => {
   const customerName = "John Doe";
@@ -28,7 +29,7 @@ const ServiceRequester = () => {
               <ActiveProjectsCard />
             </Box>
             <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
-              Spending 
+            <SmartRecommendations />
             </Box>
           </Flex>
 
@@ -49,7 +50,7 @@ const ServiceRequester = () => {
         <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(6, 1fr)", lg: "repeat(1, 1fr)" }} gap={6}>
           <GridItem colSpan={{ base: 12, md: 3 }}>
             <Box className="dashboard-tile" minHeight="200px">
-              <IngeniousPay />
+              <IngeniousPay buttonName={"Fund Wallet"}/>
             </Box>
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 3 }}>
@@ -63,8 +64,8 @@ const ServiceRequester = () => {
             </Box>
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 3 }}>
-            <Box className="dashboard-tile" minHeight="280px">
-              <SmartRecommendations />
+            <Box className="dashboard-tile" minHeight="180px">
+              <ProfileCompletionTile/>
             </Box>
           </GridItem>
         </Grid>

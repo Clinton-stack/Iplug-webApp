@@ -10,11 +10,6 @@ const layout = ({ children }) => {
       <div className="row">
         <div className="d-none d-lg-block d-md-block col-lg-4 col-md-5 !p-8 ">
           <Box
-            bgColor="#FAFAFA"
-            bgImage="url(/images/background/stepsBgImage.png)"
-            bgRepeat="no-repeat"
-            bgSize="contain"
-            bgPos="bottom"
             rounded="xl"
             p={5}
             mb={10}
@@ -51,7 +46,6 @@ const layout = ({ children }) => {
               h={{ base: "120px", sm: "170px", md: "150px", lg: "220px" }}
               overflow="hidden"
               zIndex={1}
-              bgColor="#FAFAFA"
               rounded={"xl"}
             >
               <Image

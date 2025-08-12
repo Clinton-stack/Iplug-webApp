@@ -2,7 +2,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 
-const IngeniousPay = () => {
+const IngeniousPay = ({buttonName}) => {
   return (
     <Box w="100%" h="100%">
       <Text fontSize="lg" fontWeight="bold" color="gray.900" mb={4}>
@@ -18,6 +18,14 @@ const IngeniousPay = () => {
               $75,000.00
             </Text>
           </Box>
+          <Box mb={3}>
+            <Text fontSize="clamp(12px, 1.2vw, 14px)" color="gray.500">
+              Pending Payous
+            </Text>
+            <Text fontSize="clamp(20px, 2.0vw, 22px)" fontWeight="bold" color="gray.800">
+              $125,000.00
+            </Text>
+          </Box>
 
           <Box mb={3}>
             <Text fontSize="clamp(12px, 1.2vw, 14px)" color="gray.500">
@@ -29,7 +37,7 @@ const IngeniousPay = () => {
           </Box>
         </Box>
 
-        <PrimaryButton name="Fund Wallet" bgColor="#197FCF" color="white" />
+        <PrimaryButton name={buttonName} bgColor="#197FCF" color="white" />
       </Flex>
     </Box>
   );
