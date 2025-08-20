@@ -27,7 +27,8 @@
     "react-mui-sidebar": "^1.6.3",
     "react-phone-input-2": "^2.15.1",
     "swiper": "^11.2.10",
-    "tinycolor2": "^1.6.0"
+    "tinycolor2": "^1.6.0",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

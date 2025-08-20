@@ -1,4 +1,5 @@
-import { Box, Text, Image, HStack } from "@chakra-ui/react";
+import { Box, Text, Image, HStack, Flex } from "@chakra-ui/react";
+import PrimaryButton from "../ui/PrimaryButton";
 
 export default function ServiceCard({ item, role, onClick }) {
   return (
@@ -29,6 +30,9 @@ export default function ServiceCard({ item, role, onClick }) {
           <Text fontSize="xs" color={item.availability?.toLowerCase().includes("available") ? "green.500" : "orange.500"}>
             {item.availability}
           </Text>
+          <Flex justify="flex-end">
+                <PrimaryButton name="Request" bgColor="#197FCF" w="80px" />
+          </Flex>
         </>
       )}
     </Box>

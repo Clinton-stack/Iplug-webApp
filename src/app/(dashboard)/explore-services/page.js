@@ -1,16 +1,17 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
-import { Box, Button, Heading, Text, VStack, SimpleGrid } from "@chakra-ui/react";
-import { categories } from "@/constants/categories";
+import { Box, Button, Heading, Text, VStack, SimpleGrid, useDisclosure } from "@chakra-ui/react";
 import { servicesData } from "@/constants/allServiceProvidersData";
-import CategoriesGrid from "@/components/exploreServices/CatergoriesGrid";
 import FiltersPanel from "@/components/exploreServices/FiltersPanel";
-import ServiceCard from "@/components/exploreServices/ServiceCard";
 import { useFilters } from "@/hooks/useServiceFilters";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import ServiceSlider from "@/components/exploreServices/ServiceSlider";
+import ServiceSlider from "@/components/exploreServices/ServiceResults";
+import { useRequestStore } from "@/store/requestStore";
 
 export default function ExplorePage({ role = "requester", onNavigate }) {
+
+  const openModal = useRequestStore((state) => state.openModal);
+
   const allServices = useMemo(() => Object.values(servicesData).flat(), []);
   const items = role === "requester" ? allServices : []; // later replace [] with allRequests
 
@@ -38,15 +39,13 @@ export default function ExplorePage({ role = "requester", onNavigate }) {
           {role === "requester" ? "Discover talented providers and services for your needs." : "Browse open custom requests and place your bids."}
         </Text>
         {role === "requester" && (
-          <PrimaryButton name="Post a Custom Request" mt={4} bgColor="#197FCF" onClick={() => onNavigate("create-request")} maxWidth="400px" color="#fff" />
+          <PrimaryButton name="Post a Custom Request" mt={4} bgColor="#197FCF" onClick={openModal} maxWidth="400px" color="#fff" />
         )}
+       
       </Box>
 
       {/* Filters */}
       <FiltersPanel filters={filters} setFilters={setFilters} onApply={applyFilters} />
-
-      {/* Categories */}
-      <CategoriesGrid categories={categories} onSelectCategory={(cat) => onNavigate("explore-category", { category: cat })} />
 
       {/* Results */}
       <Box bg="white" p={6} rounded="xl" shadow="sm">

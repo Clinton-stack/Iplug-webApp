@@ -1,4 +1,5 @@
 'use client';
+import { RequestFormDialog } from '@/components/forms/CustomrequestModal';
 import Navbar from '@/components/Navbar';
 import AppSidebar from '@/components/SiderBar/SideBar';
 import { Grid, GridItem, Box } from '@chakra-ui/react';
@@ -41,6 +42,7 @@ const Layout = ({ children }) => {
 
           {/* Scrollable content below the navbar */}
           <Box pt={navbarHeight}  overflowY="auto" >
+            <RequestFormDialog />
             {children}
           </Box>
         </GridItem>

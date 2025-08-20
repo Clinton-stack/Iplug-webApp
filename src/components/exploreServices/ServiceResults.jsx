@@ -30,7 +30,7 @@ export default function PaginatedServiceGrid({ items, role, onCardClick }) {
       </SimpleGrid>
 
       <Box textAlign="center">
-        <Pagination.Root count={totalPages} pageSize={1} currentPage={currentPage} onChange={setCurrentPage}>
+        <Pagination.Root count={totalPages} pageSize={1} defaultPage={currentPage} onChange={setCurrentPage}>
           <ButtonGroup variant="ghost" size="sm" isAttached>
             <Pagination.PrevTrigger asChild>
               <IconButton aria-label="Previous page" >

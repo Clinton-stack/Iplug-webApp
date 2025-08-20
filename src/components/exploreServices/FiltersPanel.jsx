@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Input, NativeSelect, Button } from "@chakra-ui/react";
 import PrimaryButton from "../ui/PrimaryButton";
+import { categoriesData } from "@/constants/categories";
 
 export default function FiltersPanel({ filters, setFilters, onApply }) {
   const handleClear = () => {
@@ -9,6 +10,8 @@ export default function FiltersPanel({ filters, setFilters, onApply }) {
       maxPrice: "",
       minRating: "0",
       sortBy: "none",
+        category: "",
+        maxDeliveryTime: "",
     });
   };
 
@@ -25,6 +28,32 @@ export default function FiltersPanel({ filters, setFilters, onApply }) {
           onChange={(e) => setFilters({ ...filters, searchTerm: e.target.value })}
           maxW="300px"
         />
+        <NativeSelect.Root
+          size="sm"
+          width="300px"
+          value={filters.category || ""}
+          onChange={(e) => setFilters((prev) => ({ ...prev, category: e.target.value }))}
+        >
+          <NativeSelect.Field>
+            <option value="">All Categories</option>
+            <option value="technology">🔧 Technology & Digital Services</option>
+            <option value="automotive">🚗 Automotive Services</option>
+            <option value="creative">🎨 Creative</option>
+            <option value="food-catering">🍲 Food & Catering</option>
+            <option value="events-entertainment">🎉 Events & Entertainment</option>
+            <option value="home-services">🛠️ Home Services</option>
+            <option value="professional-services">📚 Professional Services</option>
+            <option value="agriculture">🚜 Agriculture & Food Processing</option>
+            <option value="fashion-beauty">👗 Fashion & Beauty</option>
+            <option value="transportation-logistics">🚚 Transportation & Logistics</option>
+            <option value="security-services">🔐 Security Services</option>
+            <option value="media-production">📽️ Media & Production</option>
+            <option value="education-training">📖 Education & Training</option>
+            <option value="health-wellness">💪 Health & Wellness</option>
+            <option value="repair-maintenance">🛠️ Repair & Maintenance</option>
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
         <Input
           type="number"
           placeholder="Min Price"
@@ -61,6 +90,7 @@ export default function FiltersPanel({ filters, setFilters, onApply }) {
           </NativeSelect.Field>
           <NativeSelect.Indicator />
         </NativeSelect.Root>
+
         <PrimaryButton name="Clear All" variant="outline" bgColor="gray" onClick={handleClear} color="#fff" maxW="100px" />
       </Flex>
 
