@@ -6,9 +6,11 @@ import { usePathname } from "next/navigation";
 import { navItems } from "@/constants/SidebarData";
 import { RiMenuFold2Fill, RiMenuUnfold2Fill } from "react-icons/ri";
 import { Tooltip } from "../ui/tooltip";
+import { useUserStore } from "@/store/userStore";
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const pathname = usePathname();
+  const {role } = useUserStore()
 
   return (
     <Box
@@ -40,7 +42,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
       {/* Navigation */}
       <VStack align="stretch" spacing={4} mt={4} pl={2}>
-        {navItems.map((section) => (
+        {navItems(role).map((section) => (
           <Box key={section.heading}>
             {!collapsed && (
               <Text fontSize="xs" fontWeight="bold" color="gray.900" px={2} mt={2} mb={1}>

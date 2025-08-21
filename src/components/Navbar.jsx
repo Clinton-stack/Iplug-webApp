@@ -1,13 +1,12 @@
-import {Flex, HStack, Icon, Image, Input, InputGroup, Menu, Portal, Switch, Text } from "@chakra-ui/react";
+import { useUserStore } from "@/store/userStore";
+import { Flex, HStack, Icon, Image, Input, InputGroup, Menu, Portal, Switch, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { FaChevronDown, FaUserCog, FaSignOutAlt,} from "react-icons/fa";
+import { FaChevronDown, FaUserCog, FaSignOutAlt } from "react-icons/fa";
 import { HiOutlineBell } from "react-icons/hi";
 import { LuMessageSquareMore, LuSearch } from "react-icons/lu";
 
 const Navbar = () => {
-  const [isProvider, setIsProvider] = useState(false);
-
-
+  const { role, setRole } = useUserStore();
 
   return (
     <Flex align="center" justify="space-between" h="70px" w="full" px={4} bg="#F8FAFB" boxShadow="xs">
@@ -45,10 +44,10 @@ const Navbar = () => {
                   </HStack>
                 </Menu.Item>
                 <Menu.Item>
-                  <Switch.Root checked={isProvider} onCheckedChange={() => setIsProvider((prev) => !prev)} colorPalette="blue">
+                  <Switch.Root checked={role === "provider"} onCheckedChange={(e) => setRole(e.checked ? "provider" : "requester")} colorPalette="blue">
                     <Switch.HiddenInput />
                     <Switch.Control />
-                    <Switch.Label fontWeight="semibold">{isProvider ? "Provider" : "Requester"}</Switch.Label>
+                    <Switch.Label fontWeight="semibold">{role === "provider" ? "Provider" : "Requester"}</Switch.Label>
                   </Switch.Root>
                 </Menu.Item>
               </Menu.Content>

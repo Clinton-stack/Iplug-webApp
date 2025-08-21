@@ -10,13 +10,15 @@ import {
     FiBell,
     FiSettings,
   } from "react-icons/fi";
+
   
-  export const navItems = [
+  
+  export const navItems = (role) => [
     {
       heading: "Main Navigation",
       items: [
         { label: "Home", href: "/home", icon: <FiHome /> },
-        { label: "Explore Services", href: "/explore-services", icon: <FiSearch /> },
+        { label: role === "requester" ? "Explore Services": "Explore Projects", href: "/explore-services", icon: <FiSearch /> },
         { label: "Messages", href: "/messages", icon: <FiMessageSquare /> },
         { label: "My Project", href: "/projects", icon: <FiBriefcase /> },
         { label: "Profile", href: "/profile", icon: <FiUser /> },

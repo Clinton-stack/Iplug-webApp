@@ -2,14 +2,15 @@
 import FloatingCurrencySelector from "@/components/CurrencySelector";
 import ServiceProvider from "@/components/dashboard/ServiceProvider";
 import ServiceRequester from "@/components/dashboard/ServiceRequester";
+import { useUserStore } from "@/store/userStore";
 import React, { useState } from "react";
 
 const Dashboard = () => {
-  const [userType, setUserType] = useState("serviceProvider");
+  const { role } = useUserStore()
   return (
     <div className="dashboard-container">
       <FloatingCurrencySelector />
-      {userType === "serviceRequester" ? (
+      {role === "requester" ? (
         <ServiceRequester />
       ) : (
         <ServiceProvider />
