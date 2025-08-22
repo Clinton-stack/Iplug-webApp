@@ -38,7 +38,7 @@ export const navItems: NavSection[] = [
     {
       heading: "Finance Center",
       items: [
-        { label: "Ingenious Pay", href: "/pay", icon: FiDollarSign },
+        { label: "Ingenious Pay", href: "/ingenious-pay", icon: FiDollarSign },
       ],
     },
     {
