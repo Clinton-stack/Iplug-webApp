@@ -29,6 +29,21 @@ body {
   font-family: var(--font-dm-sans), Arial, sans-serif;
   background-color: #e7fcff;
 }
+
+/* Preloader animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 p {
   margin-top: 0;
   margin-bottom: 0;
@@ -99,9 +114,77 @@ h1{
   height: 100vh;
 
 }
-.mobile-image-height {
-  height: 300px;
-  overflow: hidden;
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .dashboard-tile {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  
+  .hero-image-background {
+    border-radius: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  
+  /* Mobile sidebar overlay styles */
+  .mobile-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  
+  /* Ensure mobile content doesn't overflow */
+  .mobile-content {
+    padding-left: 8px;
+    padding-right: 8px;
+    overflow-x: hidden;
+  }
+  
+  /* Mobile-friendly grid adjustments */
+  .service-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+  
+  /* Mobile card adjustments */
+  .service-card {
+    margin-bottom: 12px;
+  }
+  
+  /* Hide certain elements on mobile for better UX */
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-tile {
+    padding: 18px;
+  }
+  
+  .service-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .pin-input {
@@ -118,9 +201,6 @@ h1{
   box-shadow: 0 0 0 2px rgba(0, 107, 255, 0.2);
 }
 
-/* .css-mr7137 {
-  background-position: bottom;
-} */
 
 .already-have-account-text {
   font-family: var(--font-mulish), sans-serif;
@@ -232,4 +312,270 @@ h1{
 
 .swiper-wrapper{
   padding-bottom: 40px;
+}
+
+/* Sidebar Styles */
+
+/* Remove all underlines from sidebar links */
+aside[role="navigation"] a,
+aside[role="navigation"] a:hover,
+aside[role="navigation"] a:focus,
+aside[role="navigation"] a:active,
+aside[role="navigation"] a:visited,
+[data-sidebar] a,
+[data-sidebar] a:hover,
+[data-sidebar] a:focus,
+[data-sidebar] a:active,
+[data-sidebar] a:visited {
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.sidebar-nav-item {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-nav-item:hover {
+  transform: translateX(4px);
+}
+
+.sidebar-nav-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 3px solid #ffffff;
+}
+
+.sidebar-nav-item.active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #f5f5f5;
+}
+
+/* Remove underlines from sidebar links */
+.sidebar-nav-item a,
+.sidebar-nav-item a:hover,
+.sidebar-nav-item a:focus,
+.sidebar-nav-item a:active,
+.sidebar-nav-item a:visited {
+  text-decoration: none !important;
+  outline: none;
+}
+
+/* Remove underlines from all sidebar navigation */
+aside a,
+aside a:hover,
+aside a:focus,
+aside a:active,
+aside a:visited {
+  text-decoration: none !important;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .dashboard-tile {
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .mobile-padding {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  
+  /* Hide desktop sidebar on mobile */
+  .desktop-sidebar {
+    display: none;
+  }
+  
+  /* Mobile overlay styles */
+  .mobile-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .mobile-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  /* Mobile grid adjustments */
+  .mobile-content {
+    padding: 8px;
+  }
+  
+  .mobile-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  /* Mobile typography */
+  h1 {
+    font-size: 24px !important;
+    line-height: 28px !important;
+  }
+  
+  /* Mobile button adjustments */
+  .userTypeButton {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .userTypeButton .title {
+    font-size: 13px;
+  }
+  
+  .userTypeButton .description {
+    font-size: 10px;
+  }
+}
+
+/* Messages page styles */
+.message-animation {
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse-recording {
+  animation: pulseRed 1s infinite;
+}
+
+@keyframes pulseRed {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Voice message wave animation */
+.voice-wave {
+  animation: waveAnimation 1s ease-in-out infinite;
+}
+
+@keyframes waveAnimation {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 12px;
+  }
+}
+
+/* Scrollbar styling for chat area */
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Mobile responsive adjustments for messages */
+@media (max-width: 768px) {
+  .messages-mobile-sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100vh;
+    width: 80vw;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
+    background: white;
+  }
+  
+  .messages-mobile-sidebar.open {
+    left: 0;
+  }
+  
+  .messages-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  .message-bubble {
+    max-width: 85% !important;
+  }
+  
+  .chat-input-mobile {
+    padding: 12px 8px !important;
+  }
+  
+  .chat-header-mobile {
+    padding: 12px 16px !important;
+  }
 }
