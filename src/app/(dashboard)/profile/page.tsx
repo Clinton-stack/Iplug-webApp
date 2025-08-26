@@ -1,972 +1,714 @@
-"use client"
+'use client';
 
 import React, { useState } from 'react';
 import {
   Box,
   Flex,
-  Grid,
+  VStack,
+  HStack,
   Text,
   Button,
   Badge,
-  Stack,
-  HStack,
+  Grid,
+  Card,
+  Tabs,
   Heading,
-  Input,
-  Textarea,
+  SimpleGrid,
+  Switch
 } from '@chakra-ui/react';
 import {
-  FiCamera,
-  FiEdit,
-  FiStar,
-  FiUpload,
-  FiUsers,
-  FiMail,
-  FiUser,
-  FiPhone,
+  FiEdit3,
   FiMapPin,
+  FiCalendar,
+  FiShield,
+  FiStar,
+  FiTarget,
+  FiAward,
+  FiDollarSign,
+  FiCheck,
+  FiMail,
+  FiPhone,
   FiGlobe,
-  FiLinkedin,
-  FiGithub,
-  FiTwitter,
-  FiSave,
-  FiX,
   FiPlus,
+  FiBriefcase,
+  FiZap,
+  FiAlertTriangle,
+  FiRefreshCw
 } from 'react-icons/fi';
+import { useUserRoleSafe } from '@/contexts/UserRoleContext';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-// Mock profile data
-const mockProfileData = {
-  id: 1,
-  name: "Alex Johnson",
-  email: "alex.johnson@example.com",
-  phone: "+1 (555) 123-4567",
-  location: "San Francisco, CA",
-  avatar: "",
-  coverImage: "",
-  title: "Full-Stack Developer & UI/UX Designer",
-  bio: "Passionate developer with 5+ years of experience creating beautiful and functional web applications. Specialized in React, Node.js, and modern web technologies.",
-  skills: [
-    { name: "React", level: "Expert", years: 5 },
-    { name: "Node.js", level: "Expert", years: 4 },
-    { name: "TypeScript", level: "Advanced", years: 3 },
-    { name: "UI/UX Design", level: "Advanced", years: 4 },
-    { name: "MongoDB", level: "Intermediate", years: 3 },
-    { name: "AWS", level: "Intermediate", years: 2 },
-  ],
-  rating: 4.9,
-  totalReviews: 156,
-  completedProjects: 89,
-  responseTime: "< 2 hours",
-  socialLinks: {
-    website: "https://alexjohnson.dev",
-    linkedin: "https://linkedin.com/in/alexjohnson",
-    github: "https://github.com/alexjohnson",
-    twitter: "https://twitter.com/alexjohnson"
+// Mock user data with distinct differences between roles
+const mockUserData = {
+  id: '1',
+  fullName: 'Sarah Johnson',
+  username: '@sarah_tech',
+  bio: 'Experienced project manager and entrepreneur passionate about connecting talented professionals with innovative projects.',
+  location: 'San Francisco, CA',
+  joinedDate: 'Feb 2025',
+  isVerified: true,
+  
+  requester: {
+    trustTier: 'Premium Requester',
+    ingeniousPayBalance: 2580.50,
+    totalRequests: 47,
+    projectsCompleted: 42,
+    averageRating: 4.8,
+    collaborations: 28,
+    interests: ['Technology & Digital Services', 'Creative & Design', 'Business & Marketing'],
+    preferredCommunication: ['Email', 'Video Call', 'Chat'],
+    recentActivity: {
+      lastProjects: ['Mobile App UI/UX Design', 'E-commerce Website Development', 'Brand Identity Package'],
+      lastProviderHired: 'Alex Chen - Full Stack Developer',
+      mostUsedCategory: 'Technology & Digital Services'
+    }
   },
-  gamification: {
-    points: 2450,
-    level: "Gold",
-    badges: [
-      { id: 1, name: "Quick Responder", icon: "⚡", description: "Responds within 1 hour", earned: true },
-      { id: 2, name: "Top Rated", icon: "⭐", description: "Maintains 4.8+ rating", earned: true },
-      { id: 3, name: "Project Master", icon: "🏆", description: "Completed 50+ projects", earned: true },
-      { id: 4, name: "Team Player", icon: "🤝", description: "Great collaboration skills", earned: true },
-      { id: 5, name: "Innovation Expert", icon: "💡", description: "Innovative solutions", earned: false },
-      { id: 6, name: "Mentor", icon: "🎓", description: "Helped 10+ junior developers", earned: false },
+  
+  provider: {
+    hourlyRate: 85,
+    trustInfo: {
+      starRating: 4.9,
+      gamificationLevel: 'Prime Plug',
+      trustTier: 'Elite Provider'
+    },
+    metrics: {
+      totalProjects: 89,
+      completedProjects: 85,
+      ongoingProjects: 4,
+      completionRate: 95.5,
+      clientRating: 4.9,
+      onTimeDelivery: 96,
+      repeatClients: 34
+    },
+    portfolio: [
+      { id: '1', title: 'E-commerce Platform', category: 'Web Development', featured: true, visibility: 'Public' },
+      { id: '2', title: 'Mobile Banking App', category: 'Mobile Development', featured: false, visibility: 'Public' },
+      { id: '3', title: 'AI Dashboard', category: 'AI/ML Development', featured: true, visibility: 'Private' }
     ],
-    referrals: 12,
-    nextLevelPoints: 3000
-  },
-  portfolio: [
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      description: "Modern e-commerce platform built with React and Node.js",
-      image: "",
-      technologies: ["React", "Node.js", "MongoDB", "AWS"],
-      liveUrl: "https://example.com",
-      githubUrl: "https://github.com/example"
+    skills: [
+      { name: 'React.js', experience: '5 years', certified: true, level: 'Expert' },
+      { name: 'Node.js', experience: '4 years', certified: true, level: 'Advanced' },
+      { name: 'Python', experience: '3 years', certified: false, level: 'Intermediate' },
+      { name: 'AWS', experience: '2 years', certified: true, level: 'Intermediate' }
+    ],
+    availability: {
+      availableForWork: true,
+      workingHours: '9 AM - 6 PM PST',
+      teamInvites: true,
+      smartMatch: true,
+      maxActiveProjects: 5
     },
-    {
-      id: 2,
-      title: "Task Management App",
-      description: "Collaborative task management application with real-time updates",
-      image: "",
-      technologies: ["React", "TypeScript", "Socket.io", "PostgreSQL"],
-      liveUrl: "https://example.com",
-      githubUrl: "https://github.com/example"
-    },
-    {
-      id: 3,
-      title: "Mobile Banking UI",
-      description: "Modern mobile banking interface design",
-      image: "",
-      technologies: ["Figma", "UI/UX Design", "Prototyping"],
-      liveUrl: "https://example.com",
-      githubUrl: ""
+    financial: {
+      balance: 15420.75,
+      totalEarnings: 127800
     }
-  ],
-  reviews: [
-    {
-      id: 1,
-      client: "Sarah Wilson",
-      rating: 5,
-      comment: "Outstanding work! Alex delivered exactly what we needed and went above and beyond. Highly recommended!",
-      project: "E-commerce Website",
-      date: "2024-02-15"
-    },
-    {
-      id: 2,
-      client: "Michael Chen",
-      rating: 5,
-      comment: "Great communication and excellent technical skills. The project was completed on time and exceeded our expectations.",
-      project: "Mobile App Development",
-      date: "2024-02-10"
-    },
-    {
-      id: 3,
-      client: "Emily Davis",
-      rating: 4,
-      comment: "Very professional and knowledgeable. Minor delays but the final result was worth it.",
-      project: "Web Application",
-      date: "2024-02-05"
-    }
-  ]
+  }
 };
 
-const skillLevelColors = {
-  "Expert": "green",
-  "Advanced": "blue",
-  "Intermediate": "yellow",
-  "Beginner": "gray"
-} as const;
+const ProfilePageContent: React.FC = () => {
+  const userRoleContext = useUserRoleSafe();
+  const [activeTab, setActiveTab] = useState(0);
 
-type SkillLevel = keyof typeof skillLevelColors;
+  if (!userRoleContext) {
+    return (
+      <Box minH="calc(100vh - 140px)" display="flex" alignItems="center" justifyContent="center" p={8} bg="gray.50">
+        <Card.Root maxW="md" w="full">
+          <Card.Body p={8} textAlign="center">
+            <VStack gap={6}>
+              <Box p={4} borderRadius="full" bg="orange.100">
+                <FiAlertTriangle size={32} />
+              </Box>
+              <VStack gap={2}>
+                <Text fontSize="xl" fontWeight="bold" color="gray.900">Authentication Required</Text>
+                <Text color="gray.600" fontSize="sm">Please refresh the page or navigate back to home.</Text>
+              </VStack>
+              <VStack gap={3} w="full">
+                <Button onClick={() => window.location.reload()} colorScheme="blue" w="full">
+                  <FiRefreshCw style={{ marginRight: '8px' }} />
+                  Refresh Page
+                </Button>
+                <Button onClick={() => window.location.href = '/home'} variant="outline" w="full">
+                  Go to Home
+                </Button>
+              </VStack>
+            </VStack>
+          </Card.Body>
+        </Card.Root>
+      </Box>
+    );
+  }
 
-interface Skill {
-  name: string;
-  level: SkillLevel;
-  years: number;
-}
-
-export default function ProfilePage() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
-  const [profileData, setProfileData] = useState(mockProfileData);
-  const [newSkill, setNewSkill] = useState({ name: "", level: "Beginner" as SkillLevel, years: 1 });
-
-  const handleSaveProfile = () => {
-    setIsEditing(false);
-    // Here you would typically save to an API
-  };
-
-  const handleAddSkill = () => {
-    if (newSkill.name.trim()) {
-      setProfileData(prev => ({
-        ...prev,
-        skills: [...prev.skills, { ...newSkill, years: Number(newSkill.years) }]
-      }));
-      setNewSkill({ name: "", level: "Beginner", years: 1 });
-    }
-  };
-
-  const handleRemoveSkill = (skillName: string) => {
-    setProfileData(prev => ({
-      ...prev,
-      skills: prev.skills.filter(skill => skill.name !== skillName)
-    }));
-  };
-
-  const TabButton = ({ id, label, isActive, onClick }: { 
-    id: string; 
-    label: string; 
-    isActive: boolean; 
-    onClick: () => void;
-  }) => (
-    <Button
-      variant={isActive ? "solid" : "ghost"}
-      colorScheme={isActive ? "blue" : "gray"}
-      onClick={onClick}
-      size="sm"
-    >
-      {label}
-    </Button>
-  );
+  const { userRole, toggleUserRole } = userRoleContext;
+  const user = mockUserData;
+  const isRequester = userRole === 'Requester';
+  const isProvider = userRole === 'Provider';
 
   return (
-    <Box p={6}>
-      {/* Header Section */}
-      <Box position="relative" mb={8}>
-        {/* Cover Image */}
-        <Box
-          h="200px"
-          bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-          borderRadius="lg"
-          position="relative"
-          mb={16}
-        >
-          <Button
-            position="absolute"
-            top={4}
-            right={4}
-            size="sm"
-            variant="ghost"
-            color="white"
-            _hover={{ bg: "whiteAlpha.200" }}
-          >
-            <FiCamera size={16} />
-            <Text ml={2}>Change Cover</Text>
-          </Button>
-          
-          {/* Profile Photo */}
-          <Box
-            position="absolute"
-            bottom={-16}
-            left={8}
-            w="32"
-            h="32"
-            bg="white"
-            borderRadius="full"
-            p={1}
-            shadow="lg"
-          >
-            <Box
-              w="full"
-              h="full"
-              bg="blue.500"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              color="white"
-              fontSize="2xl"
-              fontWeight="bold"
-              position="relative"
-            >
-              {profileData.name.split(' ').map(n => n[0]).join('')}
-              <Button
-                position="absolute"
-                bottom={0}
-                right={0}
-                size="xs"
-                borderRadius="full"
-                bg="blue.600"
-                _hover={{ bg: "blue.700" }}
-                minW="auto"
-                h="6"
-                w="6"
-                p={0}
-              >
-                <FiCamera size={12} />
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Profile Info */}
-        <Flex justify="space-between" align="start" mt={4}>
-          <Box>
-            <Heading size="lg" mb={2}>{profileData.name}</Heading>
-            <Text fontSize="lg" color="blue.600" mb={2}>{profileData.title}</Text>
-            <HStack gap={4} mb={4} color="gray.600" fontSize="sm">
-              <HStack gap={1}>
-                <FiMapPin size={14} />
-                <Text>{profileData.location}</Text>
-              </HStack>
-              <HStack gap={1}>
-                <FiStar size={14} />
-                <Text>{profileData.rating} ({profileData.totalReviews} reviews)</Text>
-              </HStack>
-              <HStack gap={1}>
-                <FiUser size={14} />
-                <Text>{profileData.completedProjects} projects completed</Text>
-              </HStack>
-            </HStack>
-          </Box>
-          
-          <Button
-            colorScheme="blue"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            {isEditing ? <><FiX /> Cancel</> : <><FiEdit /> Edit Profile</>}
-          </Button>
-        </Flex>
-      </Box>
-
-      {/* Tabs */}
-      <HStack gap={4} mb={6} overflowX="auto">
-        <TabButton
-          id="overview"
-          label="Overview"
-          isActive={activeTab === "overview"}
-          onClick={() => setActiveTab("overview")}
-        />
-        <TabButton
-          id="portfolio"
-          label="Portfolio"
-          isActive={activeTab === "portfolio"}
-          onClick={() => setActiveTab("portfolio")}
-        />
-        <TabButton
-          id="reviews"
-          label="Reviews"
-          isActive={activeTab === "reviews"}
-          onClick={() => setActiveTab("reviews")}
-        />
-        <TabButton
-          id="gamification"
-          label="Achievements"
-          isActive={activeTab === "gamification"}
-          onClick={() => setActiveTab("gamification")}
-        />
-        <TabButton
-          id="settings"
-          label="Settings"
-          isActive={activeTab === "settings"}
-          onClick={() => setActiveTab("settings")}
-        />
-      </HStack>
-
-      {/* Tab Content */}
-      {activeTab === "overview" && (
-        <Grid templateColumns="2fr 1fr" gap={8}>
-          <Stack gap={6}>
-            {/* About Section */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Flex justify="space-between" align="center" mb={4}>
-                <Heading size="md">About</Heading>
-                {isEditing && (
-                  <Button size="sm" variant="outline">
-                    <FiEdit size={14} />
+    <Box p={6} maxW="100%" mx="auto">
+      {/* Profile Header */}
+      <Card.Root mb={6}>
+        <Card.Body p={6}>
+          <Flex direction={{ base: 'column', lg: 'row' }} gap={6}>
+            {/* Profile Picture and Basic Info */}
+            <VStack align="start" gap={4} minW="300px">
+              <HStack gap={4}>
+                <Box position="relative">
+                  <Box w="80px" h="80px" borderRadius="full" bg="blue.100" display="flex" alignItems="center" justifyContent="center" fontSize="2xl" fontWeight="bold" color="blue.600">
+                    {user.fullName.split(' ').map(n => n[0]).join('')}
+                  </Box>
+                  <Button size="sm" position="absolute" bottom={0} right={0} borderRadius="full" colorScheme="blue" minW="auto" h="auto" p={1}>
+                    <FiEdit3 size={12} />
                   </Button>
-                )}
-              </Flex>
-              {isEditing ? (
-                <Textarea
-                  value={profileData.bio}
-                  onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
-                  rows={4}
-                  resize="vertical"
-                />
-              ) : (
-                <Text color="gray.700" lineHeight="1.6">{profileData.bio}</Text>
-              )}
-            </Box>
-
-            {/* Skills Section */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Flex justify="space-between" align="center" mb={4}>
-                <Heading size="md">Skills & Expertise</Heading>
-                {isEditing && (
-                  <Button size="sm" colorScheme="blue" onClick={handleAddSkill}>
-                    <FiPlus size={14} />
-                    <Text ml={2}>Add Skill</Text>
-                  </Button>
-                )}
-              </Flex>
-              
-              {isEditing && (
-                <Box mb={4} p={4} bg="gray.50" borderRadius="md">
-                  <Grid templateColumns="2fr 1fr 1fr auto" gap={3} alignItems="end">
-                    <Box>
-                      <Text fontSize="sm" mb={1}>Skill Name</Text>
-                      <Input
-                        placeholder="e.g., React"
-                        value={newSkill.name}
-                        onChange={(e) => setNewSkill(prev => ({ ...prev, name: e.target.value }))}
-                        size="sm"
-                      />
-                    </Box>
-                    <Box>
-                      <Text fontSize="sm" mb={1}>Level</Text>
-                      <select
-                        value={newSkill.level}
-                        onChange={(e: any) => setNewSkill(prev => ({ ...prev, level: e.target.value }))}
-                        style={{
-                          padding: '6px 8px',
-                          border: '1px solid #E2E8F0',
-                          borderRadius: '6px',
-                          fontSize: '14px',
-                          width: '100%'
-                        }}
-                      >
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                        <option value="Expert">Expert</option>
-                      </select>
-                    </Box>
-                    <Box>
-                      <Text fontSize="sm" mb={1}>Years</Text>
-                      <Input
-                        type="number"
-                        min="1"
-                        max="20"
-                        value={newSkill.years}
-                        onChange={(e) => setNewSkill(prev => ({ ...prev, years: parseInt(e.target.value) || 1 }))}
-                        size="sm"
-                      />
-                    </Box>
-                    <Button
-                      colorScheme="blue"
-                      size="sm"
-                      onClick={handleAddSkill}
-                      disabled={!newSkill.name.trim()}
-                    >
-                      Add
-                    </Button>
-                  </Grid>
-                </Box>
-              )}
-
-              <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={3}>
-                {profileData.skills.map((skill) => (
-                  <Flex
-                    key={skill.name}
-                    justify="space-between"
-                    align="center"
-                    p={3}
-                    bg="gray.50"
-                    borderRadius="md"
-                    border="1px solid"
-                    borderColor="gray.200"
-                  >
-                    <Box flex="1">
-                      <Text fontWeight="medium" fontSize="sm">{skill.name}</Text>
-                      <HStack gap={2} mt={1}>
-                        <Badge colorScheme={skillLevelColors[skill.level as SkillLevel]} size="sm">
-                          {skill.level}
-                        </Badge>
-                        <Text fontSize="xs" color="gray.600">
-                          {skill.years} year{skill.years !== 1 ? 's' : ''}
-                        </Text>
-                      </HStack>
-                    </Box>
-                    {isEditing && (
-                      <Button
-                        size="xs"
-                        variant="ghost"
-                        color="red.500"
-                        onClick={() => handleRemoveSkill(skill.name)}
-                      >
-                        <FiX size={12} />
-                      </Button>
-                    )}
-                  </Flex>
-                ))}
-              </Grid>
-            </Box>
-          </Stack>
-
-          <Stack gap={6}>
-            {/* Quick Stats */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Quick Stats</Heading>
-              <Stack gap={4}>
-                <Flex justify="space-between">
-                  <Text color="gray.600">Rating</Text>
-                  <HStack gap={1}>
-                    <Text fontWeight="bold">{profileData.rating}</Text>
-                    <FiStar color="#F6AD55" size={16} />
-                  </HStack>
-                </Flex>
-                <Flex justify="space-between">
-                  <Text color="gray.600">Projects Completed</Text>
-                  <Text fontWeight="bold">{profileData.completedProjects}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                  <Text color="gray.600">Total Reviews</Text>
-                  <Text fontWeight="bold">{profileData.totalReviews}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                  <Text color="gray.600">Response Time</Text>
-                  <Text fontWeight="bold">{profileData.responseTime}</Text>
-                </Flex>
-              </Stack>
-            </Box>
-
-            {/* Contact Info */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Contact & Social</Heading>
-              <Stack gap={3}>
-                <HStack gap={3}>
-                  <FiMail color="#666" size={16} />
-                  <Text fontSize="sm">{profileData.email}</Text>
-                </HStack>
-                <HStack gap={3}>
-                  <FiPhone color="#666" size={16} />
-                  <Text fontSize="sm">{profileData.phone}</Text>
-                </HStack>
-                {profileData.socialLinks.website && (
-                  <HStack gap={3}>
-                    <FiGlobe color="#666" size={16} />
-                    <Text fontSize="sm" color="blue.600" cursor="pointer">
-                      {profileData.socialLinks.website}
-                    </Text>
-                  </HStack>
-                )}
-                <HStack gap={4} mt={2}>
-                  {profileData.socialLinks.linkedin && (
-                    <Button size="sm" variant="ghost" color="blue.600">
-                      <FiLinkedin size={16} />
-                    </Button>
-                  )}
-                  {profileData.socialLinks.github && (
-                    <Button size="sm" variant="ghost" color="gray.600">
-                      <FiGithub size={16} />
-                    </Button>
-                  )}
-                  {profileData.socialLinks.twitter && (
-                    <Button size="sm" variant="ghost" color="blue.400">
-                      <FiTwitter size={16} />
-                    </Button>
-                  )}
-                </HStack>
-              </Stack>
-            </Box>
-          </Stack>
-        </Grid>
-      )}
-
-      {activeTab === "portfolio" && (
-        <Box>
-          <Flex justify="space-between" align="center" mb={6}>
-            <Heading size="lg">Portfolio</Heading>
-            <Button colorScheme="blue">
-              <FiUpload />
-              <Text ml={2}>Add Project</Text>
-            </Button>
-          </Flex>
-          
-          <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
-            {profileData.portfolio.map((project) => (
-              <Box
-                key={project.id}
-                bg="white"
-                borderRadius="lg"
-                shadow="sm"
-                border="1px solid"
-                borderColor="gray.200"
-                overflow="hidden"
-                _hover={{ shadow: "md", transform: "translateY(-2px)" }}
-                transition="all 0.2s"
-              >
-                <Box h="200px" bg="gray.100" position="relative">
-                  <Flex
-                    align="center"
-                    justify="center"
-                    h="full"
-                    bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-                    color="white"
-                    fontSize="2xl"
-                    fontWeight="bold"
-                  >
-                    {project.title.split(' ').map(w => w[0]).join('')}
-                  </Flex>
                 </Box>
                 
-                <Box p={4}>
-                  <Heading size="sm" mb={2}>{project.title}</Heading>
-                  <Text 
-                    fontSize="sm" 
-                    color="gray.600" 
-                    mb={3} 
-                    style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    {project.description}
-                  </Text>
-                  
-                  <Flex wrap="wrap" gap={1} mb={3}>
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <Badge key={tech} size="sm" variant="outline">
-                        {tech}
+                <VStack align="start" gap={1}>
+                  <HStack>
+                    <Heading size="lg">{user.fullName}</Heading>
+                    {user.isVerified && (
+                      <Badge colorScheme="blue" variant="solid">
+                        <HStack gap={1}>
+                          <FiShield size={12} />
+                          <Text fontSize="xs">Verified</Text>
+                        </HStack>
                       </Badge>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <Badge size="sm" variant="outline">
-                        +{project.technologies.length - 3}
-                      </Badge>
-                    )}
-                  </Flex>
-                  
-                  <HStack gap={2}>
-                    {project.liveUrl && (
-                      <Button size="sm" variant="outline" flex="1">
-                        <FiGlobe size={14} />
-                        <Text ml={1}>Live</Text>
-                      </Button>
-                    )}
-                    {project.githubUrl && (
-                      <Button size="sm" variant="outline" flex="1">
-                        <FiGithub size={14} />
-                        <Text ml={1}>Code</Text>
-                      </Button>
                     )}
                   </HStack>
-                </Box>
+                  
+                  <Text color="gray.600">{user.username}</Text>
+                  
+                  <HStack gap={4} fontSize="sm" color="gray.600">
+                    <HStack gap={1}>
+                      <FiMapPin size={14} />
+                      <Text>{user.location}</Text>
+                    </HStack>
+                    <HStack gap={1}>
+                      <FiCalendar size={14} />
+                      <Text>Joined {user.joinedDate}</Text>
+                    </HStack>
+                  </HStack>
+                </VStack>
+              </HStack>
+              
+              <Text fontSize="sm" color="gray.700" maxW="400px">{user.bio}</Text>
+            </VStack>
+
+            {/* Role Toggle and Role-Specific Info */}
+            <Flex flex={1} justify="space-between" align="start" direction={{ base: 'column', md: 'row' }} gap={4}>
+              <VStack align="start" gap={3}>
+                {/* Role Toggle */}
+                <Card.Root bg="purple.50" borderColor="purple.200">
+                  <Card.Body p={3}>
+                    <HStack gap={3}>
+                      <Text fontSize="sm" fontWeight="medium">Viewing as:</Text>
+                      <Badge colorScheme="purple" variant="solid" fontSize="sm" p={2}>{userRole}</Badge>
+                      <Button size="sm" colorScheme="purple" variant="outline" onClick={toggleUserRole}>
+                        Switch to {userRole === 'Requester' ? 'Provider' : 'Requester'}
+                      </Button>
+                    </HStack>
+                  </Card.Body>
+                </Card.Root>
+                
+                {/* REQUESTER SPECIFIC DISPLAY */}
+                {isRequester && (
+                  <VStack align="start" gap={2}>
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Requester Profile</Text>
+                    <HStack gap={2} flexWrap="wrap">
+                      <Badge colorScheme="gold" variant="solid">
+                        <HStack gap={1}>
+                          <FiZap size={12} />
+                          <Text>{user.requester.trustTier}</Text>
+                        </HStack>
+                      </Badge>
+                      <Badge colorScheme="green" variant="outline">
+                        <HStack gap={1}>
+                          <FiDollarSign size={12} />
+                          <Text>${user.requester.ingeniousPayBalance.toFixed(2)} Balance</Text>
+                        </HStack>
+                      </Badge>
+                      <Badge colorScheme="blue" variant="outline">
+                        <HStack gap={1}>
+                          <FiTarget size={12} />
+                          <Text>{user.requester.projectsCompleted} Projects</Text>
+                        </HStack>
+                      </Badge>
+                    </HStack>
+                  </VStack>
+                )}
+                
+                {/* PROVIDER SPECIFIC DISPLAY */}
+                {isProvider && (
+                  <VStack align="start" gap={2}>
+                    <Text fontSize="sm" fontWeight="medium" color="gray.600">Provider Profile</Text>
+                    <HStack gap={2} flexWrap="wrap">
+                      <Badge colorScheme="purple" variant="solid">
+                        <HStack gap={1}>
+                          <FiStar size={12} />
+                          <Text>{user.provider.trustInfo.starRating} Rating</Text>
+                        </HStack>
+                      </Badge>
+                      <Badge colorScheme="blue" variant="outline">
+                        <HStack gap={1}>
+                          <FiAward size={12} />
+                          <Text>{user.provider.trustInfo.gamificationLevel}</Text>
+                        </HStack>
+                      </Badge>
+                      <Badge colorScheme="green" variant="outline">
+                        <HStack gap={1}>
+                          <FiDollarSign size={12} />
+                          <Text>${user.provider.hourlyRate}/hr</Text>
+                        </HStack>
+                      </Badge>
+                      <Badge colorScheme="cyan" variant="outline">
+                        <HStack gap={1}>
+                          <FiBriefcase size={12} />
+                          <Text>{user.provider.metrics.completedProjects} Completed</Text>
+                        </HStack>
+                      </Badge>
+                    </HStack>
+                  </VStack>
+                )}
+              </VStack>
+
+              {/* Action Buttons */}
+              <VStack gap={3}>
+                <Button colorScheme="blue">
+                  <FiEdit3 style={{ marginRight: '8px' }} />
+                  Edit Profile
+                </Button>
+                
+                {isRequester && (
+                  <Button colorScheme="green" variant="outline">Post New Request</Button>
+                )}
+                
+                {isProvider && (
+                  <VStack gap={2}>
+                    <Button colorScheme="purple" variant="outline">Create Service Listing</Button>
+                    <HStack gap={2}>
+                      <Text fontSize="xs" color="gray.600">Status:</Text>
+                      <Badge colorScheme={user.provider.availability.availableForWork ? "green" : "red"} variant="solid" size="sm">
+                        {user.provider.availability.availableForWork ? "Available" : "Busy"}
+                      </Badge>
+                    </HStack>
+                  </VStack>
+                )}
+              </VStack>
+            </Flex>
+          </Flex>
+        </Card.Body>
+      </Card.Root>
+
+      {/* Tab Navigation */}
+      <Tabs.Root value={activeTab.toString()} onValueChange={(details) => setActiveTab(parseInt(details.value))}>
+        <Tabs.List mb={6}>
+          <Tabs.Trigger value="0">{isRequester ? "Request History" : "Portfolio & Services"}</Tabs.Trigger>
+          <Tabs.Trigger value="1">{isRequester ? "Payment & Billing" : "Earnings & Performance"}</Tabs.Trigger>
+          <Tabs.Trigger value="2">Trust & Verification</Tabs.Trigger>
+          <Tabs.Trigger value="3">{isRequester ? "Preferences" : "Skills & Availability"}</Tabs.Trigger>
+        </Tabs.List>
+
+        {/* Tab Content */}
+        <Tabs.Content value="0">
+          {isRequester ? <RequesterHistory user={user} /> : <ProviderPortfolio user={user} />}
+        </Tabs.Content>
+
+        <Tabs.Content value="1">
+          {isRequester ? <RequesterBilling user={user} /> : <ProviderEarnings user={user} />}
+        </Tabs.Content>
+
+        <Tabs.Content value="2">
+          <TrustVerification user={user} userRole={userRole} />
+        </Tabs.Content>
+
+        <Tabs.Content value="3">
+          {isRequester ? <RequesterPreferences user={user} /> : <ProviderSkills user={user} />}
+        </Tabs.Content>
+      </Tabs.Root>
+    </Box>
+  );
+};
+
+// REQUESTER SPECIFIC COMPONENTS
+const RequesterHistory: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
+      <Card.Root>
+        <Card.Header><Heading size="md">Request Statistics</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={4}>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Total Requests Made</Text>
+              <Text fontWeight="bold" color="blue.600">{user.requester.totalRequests}</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Successfully Completed</Text>
+              <Text fontWeight="bold" color="green.600">{user.requester.projectsCompleted}</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Average Rating Given</Text>
+              <Text fontWeight="bold" color="yellow.600">{user.requester.averageRating}/5</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Repeat Collaborations</Text>
+              <Text fontWeight="bold" color="purple.600">{user.requester.collaborations}</Text>
+            </HStack>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+
+      <Card.Root>
+        <Card.Header><Heading size="md">Recent Request Activity</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={3}>
+            <Box>
+              <Text fontSize="sm" fontWeight="medium" mb={2}>Last 3 Requests</Text>
+              {user.requester.recentActivity.lastProjects.map((project, index) => (
+                <Text key={index} fontSize="sm" color="gray.600" mb={1}>• {project}</Text>
+              ))}
+            </Box>
+            <Box>
+              <Text fontSize="sm" fontWeight="medium" mb={1}>Latest Provider Hired</Text>
+              <Text fontSize="sm" color="gray.600">{user.requester.recentActivity.lastProviderHired}</Text>
+            </Box>
+            <Box>
+              <Text fontSize="sm" fontWeight="medium" mb={1}>Most Requested Category</Text>
+              <Badge colorScheme="blue" variant="outline">{user.requester.recentActivity.mostUsedCategory}</Badge>
+            </Box>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+    </Grid>
+  );
+};
+
+const RequesterBilling: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
+      <Card.Root>
+        <Card.Header><Heading size="md">IngeniousPay Balance</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={4}>
+            <Box textAlign="center" w="full">
+              <Text fontSize="3xl" fontWeight="bold" color="green.600">${user.requester.ingeniousPayBalance.toFixed(2)}</Text>
+              <Text fontSize="sm" color="gray.600">Available Balance</Text>
+            </Box>
+            <Button colorScheme="blue" w="full">Add Funds</Button>
+            <Button variant="outline" w="full">Transaction History</Button>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+
+      <Card.Root>
+        <Card.Header><Heading size="md">Account Benefits</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={3}>
+            <Badge colorScheme="gold" variant="solid" size="lg" p={2}>Premium Account</Badge>
+            <Text fontSize="sm" color="gray.600">• Priority customer support</Text>
+            <Text fontSize="sm" color="gray.600">• Advanced project management tools</Text>
+            <Text fontSize="sm" color="gray.600">• Higher payment limits</Text>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+    </Grid>
+  );
+};
+
+const RequesterPreferences: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
+      <Card.Root>
+        <Card.Header><Heading size="md">Interests & Categories</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={3}>
+            {user.requester.interests.map((interest, index) => (
+              <HStack key={index} justify="space-between" w="full">
+                <Text fontSize="sm">{interest}</Text>
+                <Switch.Root defaultChecked colorPalette="blue" size="sm">
+                  <Switch.HiddenInput />
+                  <Switch.Control><Switch.Thumb /></Switch.Control>
+                </Switch.Root>
+              </HStack>
+            ))}
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+
+      <Card.Root>
+        <Card.Header><Heading size="md">Communication Preferences</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={3}>
+            {user.requester.preferredCommunication.map((method, index) => (
+              <HStack key={index} justify="space-between" w="full">
+                <Text fontSize="sm">{method}</Text>
+                <Switch.Root defaultChecked colorPalette="green" size="sm">
+                  <Switch.HiddenInput />
+                  <Switch.Control><Switch.Thumb /></Switch.Control>
+                </Switch.Root>
+              </HStack>
+            ))}
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+    </Grid>
+  );
+};
+
+// PROVIDER SPECIFIC COMPONENTS
+const ProviderPortfolio: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <VStack gap={6}>
+      <HStack justify="space-between" w="full">
+        <VStack align="start" gap={1}>
+          <Heading size="md">Portfolio & Services</Heading>
+          <Text fontSize="sm" color="gray.600">Showcase your work to attract more clients</Text>
+        </VStack>
+        <Button colorScheme="blue">
+          <FiPlus style={{ marginRight: '8px' }} />
+          Add Portfolio Item
+        </Button>
+      </HStack>
+      
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} w="full">
+        {user.provider.portfolio.map((item) => (
+          <Card.Root key={item.id}>
+            <Box h="200px" bg="gradient-to-br from-blue-100 to-purple-100" borderTopRadius="md" display="flex" alignItems="center" justifyContent="center">
+              <Text color="gray.600" fontSize="sm">Portfolio Preview</Text>
+            </Box>
+            <Card.Body>
+              <VStack align="start" gap={2}>
+                <HStack justify="space-between" w="full">
+                  <Text fontWeight="medium">{item.title}</Text>
+                  <HStack gap={1}>
+                    {item.featured && (
+                      <Badge colorScheme="gold" size="sm">
+                        <HStack gap={1}>
+                          <FiStar size={10} />
+                          <Text fontSize="xs">Featured</Text>
+                        </HStack>
+                      </Badge>
+                    )}
+                    <Badge colorScheme={item.visibility === 'Public' ? 'green' : 'gray'} variant="outline" size="sm">
+                      {item.visibility}
+                    </Badge>
+                  </HStack>
+                </HStack>
+                <Text fontSize="sm" color="gray.600">{item.category}</Text>
+              </VStack>
+            </Card.Body>
+          </Card.Root>
+        ))}
+      </SimpleGrid>
+    </VStack>
+  );
+};
+
+const ProviderEarnings: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
+      <Card.Root>
+        <Card.Header><Heading size="md">Financial Overview</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={4}>
+            <Box textAlign="center" w="full">
+              <Text fontSize="3xl" fontWeight="bold" color="green.600">${user.provider.financial.balance.toFixed(2)}</Text>
+              <Text fontSize="sm" color="gray.600">Available Balance</Text>
+            </Box>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Total Earnings</Text>
+              <Text fontWeight="bold" color="purple.600">${user.provider.financial.totalEarnings.toLocaleString()}</Text>
+            </HStack>
+            <Button colorScheme="green" w="full">Request Payout</Button>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+
+      <Card.Root>
+        <Card.Header><Heading size="md">Performance Metrics</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={3}>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Completion Rate</Text>
+              <Text fontWeight="bold" color="green.600">{user.provider.metrics.completionRate}%</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Client Rating</Text>
+              <Text fontWeight="bold" color="yellow.600">{user.provider.metrics.clientRating}/5</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">On-Time Delivery</Text>
+              <Text fontWeight="bold" color="blue.600">{user.provider.metrics.onTimeDelivery}%</Text>
+            </HStack>
+            <HStack justify="space-between" w="full">
+              <Text fontSize="sm">Repeat Clients</Text>
+              <Text fontWeight="bold" color="purple.600">{user.provider.metrics.repeatClients}</Text>
+            </HStack>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+    </Grid>
+  );
+};
+
+const ProviderSkills: React.FC<{ user: typeof mockUserData }> = ({ user }) => {
+  return (
+    <VStack gap={6}>
+      <Card.Root w="full">
+        <Card.Header>
+          <HStack justify="space-between">
+            <Heading size="md">Skills & Expertise</Heading>
+            <Button size="sm" colorScheme="blue" variant="outline">
+              <FiPlus style={{ marginRight: '6px' }} />
+              Add Skill
+            </Button>
+          </HStack>
+        </Card.Header>
+        <Card.Body>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            {user.provider.skills.map((skill, index) => (
+              <Box key={index} p={4} borderWidth={1} borderRadius="md" bg="gray.50">
+                <HStack justify="space-between" mb={2}>
+                  <Text fontWeight="medium">{skill.name}</Text>
+                  <HStack gap={1}>
+                    <Badge colorScheme="blue" variant="outline" size="sm">{skill.level}</Badge>
+                    {skill.certified && (
+                      <Badge colorScheme="green" size="sm">
+                        <HStack gap={1}>
+                          <FiCheck size={10} />
+                          <Text fontSize="xs">Certified</Text>
+                        </HStack>
+                      </Badge>
+                    )}
+                  </HStack>
+                </HStack>
+                <Text fontSize="sm" color="gray.600">{skill.experience} experience</Text>
               </Box>
             ))}
-          </Grid>
-        </Box>
-      )}
+          </SimpleGrid>
+        </Card.Body>
+      </Card.Root>
 
-      {activeTab === "reviews" && (
-        <Box>
-          <Heading size="lg" mb={6}>Reviews & Ratings</Heading>
-          
-          <Grid templateColumns="1fr 2fr" gap={8}>
-            {/* Rating Summary */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Text textAlign="center" fontSize="4xl" fontWeight="bold" color="blue.600">
-                {profileData.rating}
-              </Text>
-              <HStack justify="center" mb={2}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FiStar
-                    key={star}
-                    size={20}
-                    color={star <= Math.floor(profileData.rating) ? "#F6AD55" : "#E2E8F0"}
-                    fill={star <= Math.floor(profileData.rating) ? "#F6AD55" : "none"}
-                  />
-                ))}
+      <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6} w="full">
+        <Card.Root>
+          <Card.Header><Heading size="md">Availability Settings</Heading></Card.Header>
+          <Card.Body>
+            <VStack align="start" gap={4}>
+              <HStack justify="space-between" w="full">
+                <Text fontSize="sm">Available for work</Text>
+                <Switch.Root defaultChecked={user.provider.availability.availableForWork} colorPalette="green">
+                  <Switch.HiddenInput />
+                  <Switch.Control><Switch.Thumb /></Switch.Control>
+                </Switch.Root>
               </HStack>
-              <Text textAlign="center" color="gray.600" fontSize="sm">
-                Based on {profileData.totalReviews} reviews
-              </Text>
-              
-              <Stack gap={2} mt={6}>
-                {[5, 4, 3, 2, 1].map((rating) => (
-                  <HStack key={rating} gap={2}>
-                    <Text fontSize="sm" minW="8">{rating}★</Text>
-                    <Box flex="1" h="2" bg="gray.200" borderRadius="full" overflow="hidden">
-                      <Box
-                        h="full"
-                        bg="yellow.400"
-                        borderRadius="full"
-                        style={{ 
-                          width: `${rating === 5 ? '80%' : rating === 4 ? '15%' : '5%'}%` 
-                        }}
-                      />
-                    </Box>
-                    <Text fontSize="sm" color="gray.600" minW="8">
-                      {rating === 5 ? '124' : rating === 4 ? '23' : '9'}
-                    </Text>
-                  </HStack>
-                ))}
-              </Stack>
-            </Box>
-
-            {/* Recent Reviews */}
-            <Stack gap={4}>
-              {profileData.reviews.map((review) => (
-                <Box
-                  key={review.id}
-                  bg="white"
-                  p={4}
-                  borderRadius="lg"
-                  shadow="sm"
-                  border="1px solid"
-                  borderColor="gray.200"
-                >
-                  <Flex justify="space-between" align="start" mb={3}>
-                    <Box>
-                      <Text fontWeight="medium">{review.client}</Text>
-                      <Text fontSize="sm" color="gray.600">{review.project}</Text>
-                    </Box>
-                    <HStack gap={1}>
-                      <HStack gap={0}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <FiStar
-                            key={star}
-                            size={14}
-                            color={star <= review.rating ? "#F6AD55" : "#E2E8F0"}
-                            fill={star <= review.rating ? "#F6AD55" : "none"}
-                          />
-                        ))}
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">
-                        {new Date(review.date).toLocaleDateString()}
-                      </Text>
-                    </HStack>
-                  </Flex>
-                  <Text color="gray.700" fontSize="sm" lineHeight="1.5">
-                    {review.comment}
-                  </Text>
-                </Box>
-              ))}
-            </Stack>
-          </Grid>
-        </Box>
-      )}
-
-      {activeTab === "gamification" && (
-        <Box>
-          <Heading size="lg" mb={6}>Achievements & Gamification</Heading>
-          
-          <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
-            {/* Level & Points */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Level & Points</Heading>
-              <Flex align="center" gap={4} mb={4}>
-                <Box
-                  w="16"
-                  h="16"
-                  bg="gradient.to.r"
-                  bgGradient="linear(to-r, yellow.400, orange.500)"
-                  borderRadius="full"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  color="white"
-                >
-                  {profileData.gamification.level[0]}
-                </Box>
-                <Box flex="1">
-                  <Text fontSize="xl" fontWeight="bold">{profileData.gamification.level} Level</Text>
-                  <Text color="gray.600">{profileData.gamification.points} points</Text>
-                </Box>
-              </Flex>
-              
-              <Box>
-                <Flex justify="space-between" mb={2}>
-                  <Text fontSize="sm">Progress to next level</Text>
-                  <Text fontSize="sm" color="gray.600">
-                    {profileData.gamification.points}/{profileData.gamification.nextLevelPoints}
-                  </Text>
-                </Flex>
-                <Box w="full" h="2" bg="gray.200" borderRadius="full" overflow="hidden">
-                  <Box
-                    h="full"
-                    bg="blue.500"
-                    borderRadius="full"
-                    style={{ 
-                      width: `${(profileData.gamification.points / profileData.gamification.nextLevelPoints) * 100}%` 
-                    }}
-                  />
-                </Box>
+              <Box w="full">
+                <Text fontSize="sm" fontWeight="medium" mb={1}>Working Hours</Text>
+                <Text fontSize="sm" color="gray.600">{user.provider.availability.workingHours}</Text>
               </Box>
-            </Box>
+              <HStack justify="space-between" w="full">
+                <Text fontSize="sm">Accept Team Invites</Text>
+                <Switch.Root defaultChecked={user.provider.availability.teamInvites} colorPalette="blue">
+                  <Switch.HiddenInput />
+                  <Switch.Control><Switch.Thumb /></Switch.Control>
+                </Switch.Root>
+              </HStack>
+              <HStack justify="space-between" w="full">
+                <Text fontSize="sm">Smart Match Requests</Text>
+                <Switch.Root defaultChecked={user.provider.availability.smartMatch} colorPalette="purple">
+                  <Switch.HiddenInput />
+                  <Switch.Control><Switch.Thumb /></Switch.Control>
+                </Switch.Root>
+              </HStack>
+            </VStack>
+          </Card.Body>
+        </Card.Root>
 
-            {/* Referrals */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Referrals</Heading>
-              <Flex align="center" justify="center" direction="column">
-                <Text fontSize="3xl" fontWeight="bold" color="green.600">
-                  {profileData.gamification.referrals}
-                </Text>
-                <Text color="gray.600" mb={4}>Successful Referrals</Text>
-                <Button size="sm" colorScheme="green">
-                  <FiUsers />
-                  <Text ml={2}>Invite Friends</Text>
-                </Button>
-              </Flex>
-            </Box>
+        <Card.Root>
+          <Card.Header><Heading size="md">Service Information</Heading></Card.Header>
+          <Card.Body>
+            <VStack align="start" gap={3}>
+              <Box>
+                <Text fontSize="sm" fontWeight="medium" color="gray.600">Hourly Rate</Text>
+                <Text fontWeight="bold" fontSize="lg" color="green.600">${user.provider.hourlyRate}/hour</Text>
+              </Box>
+              <Box>
+                <Text fontSize="sm" fontWeight="medium" color="gray.600">Max Active Projects</Text>
+                <Text fontSize="sm">{user.provider.availability.maxActiveProjects} projects</Text>
+              </Box>
+            </VStack>
+          </Card.Body>
+        </Card.Root>
+      </Grid>
+    </VStack>
+  );
+};
 
-            {/* Badges */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200" gridColumn={{ base: "1", lg: "1 / -1" }}>
-              <Heading size="md" mb={4}>Badges & Achievements</Heading>
-              <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4}>
-                {profileData.gamification.badges.map((badge) => (
-                  <Box
-                    key={badge.id}
-                    p={4}
-                    bg={badge.earned ? "blue.50" : "gray.50"}
-                    border="2px solid"
-                    borderColor={badge.earned ? "blue.200" : "gray.200"}
-                    borderRadius="lg"
-                    textAlign="center"
-                    opacity={badge.earned ? 1 : 0.6}
-                  >
-                    <Text fontSize="3xl" mb={2}>{badge.icon}</Text>
-                    <Text fontWeight="bold" mb={1}>{badge.name}</Text>
-                    <Text fontSize="sm" color="gray.600">{badge.description}</Text>
-                    {badge.earned && (
-                      <Badge colorScheme="green" size="sm" mt={2}>
-                        Earned
-                      </Badge>
-                    )}
-                  </Box>
-                ))}
-              </Grid>
-            </Box>
-          </Grid>
-        </Box>
-      )}
+// SHARED COMPONENTS
+const TrustVerification: React.FC<{ user: typeof mockUserData; userRole: string }> = ({ user, userRole }) => {
+  const isRequester = userRole === 'Requester';
+  
+  const verificationItems = [
+    { label: 'KYC Status', completed: user.isVerified, icon: FiShield },
+    { label: 'Email Verified', completed: true, icon: FiMail },
+    { label: 'Phone Number Linked', completed: true, icon: FiPhone },
+    { label: 'Social Media Linked', completed: false, icon: FiGlobe }
+  ];
 
-      {activeTab === "settings" && (
-        <Box>
-          <Heading size="lg" mb={6}>Account Settings</Heading>
-          
-          <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
-            {/* Personal Information */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Personal Information</Heading>
-              <Stack gap={4}>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Full Name</Text>
-                  <Input
-                    value={profileData.name}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
-                  />
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Professional Title</Text>
-                  <Input
-                    value={profileData.title}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, title: e.target.value }))}
-                  />
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Phone Number</Text>
-                  <Input
-                    value={profileData.phone}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
-                  />
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Location</Text>
-                  <Input
-                    value={profileData.location}
-                    onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
-                  />
-                </Box>
-                <Button colorScheme="blue">
-                  <FiSave />
-                  <Text ml={2}>Save Changes</Text>
-                </Button>
-              </Stack>
-            </Box>
+  return (
+    <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
+      <Card.Root>
+        <Card.Header><Heading size="md">Verification Status</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={4}>
+            {verificationItems.map((item, index) => (
+              <HStack key={index} justify="space-between" w="full">
+                <HStack gap={2}>
+                  <item.icon size={16} />
+                  <Text fontSize="sm">{item.label}</Text>
+                </HStack>
+                {item.completed ? (
+                  <Badge colorScheme="green" variant="solid" size="sm"><FiCheck size={12} /></Badge>
+                ) : (
+                  <Badge colorScheme="gray" variant="outline" size="sm">Pending</Badge>
+                )}
+              </HStack>
+            ))}
+          </VStack>
+        </Card.Body>
+      </Card.Root>
 
-            {/* Account Security */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Account Security</Heading>
-              <Stack gap={4}>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Email Address</Text>
-                  <HStack>
-                    <Input
-                      value={profileData.email}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                      flex="1"
-                    />
-                    <Button size="sm" variant="outline">
-                      Verify
-                    </Button>
+      <Card.Root>
+        <Card.Header><Heading size="md">Trust Level</Heading></Card.Header>
+        <Card.Body>
+          <VStack align="start" gap={4}>
+            <Box w="full">
+              <HStack justify="space-between" mb={2}>
+                <Text fontSize="sm" fontWeight="medium">{isRequester ? 'Requester Tier' : 'Provider Level'}</Text>
+                <Badge colorScheme="purple" variant="solid">
+                  <HStack gap={1}>
+                    <FiZap size={12} />
+                    <Text>{isRequester ? user.requester.trustTier : user.provider.trustInfo.gamificationLevel}</Text>
                   </HStack>
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Password</Text>
-                  <HStack>
-                    <Input type="password" value="••••••••" readOnly flex="1" />
-                    <Button size="sm" variant="outline">
-                      Change
-                    </Button>
-                  </HStack>
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Two-Factor Authentication</Text>
-                  <HStack justify="space-between">
-                    <Text fontSize="sm" color="gray.600">Add an extra layer of security</Text>
-                    <Button size="sm" colorScheme="green">
-                      Enable 2FA
-                    </Button>
-                  </HStack>
-                </Box>
-              </Stack>
+                </Badge>
+              </HStack>
+              <Box w="full" bg="gray.200" borderRadius="md" h="2">
+                <Box w="85%" bg="purple.500" borderRadius="md" h="2" />
+              </Box>
+              <Text fontSize="xs" color="gray.500" mt={1}>85% Trust Score</Text>
             </Box>
+            
+            <Button size="sm" colorScheme="blue" variant="outline">
+              <FiPlus style={{ marginRight: '6px' }} />
+              Increase Trust Level
+            </Button>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
+    </Grid>
+  );
+};
 
-            {/* Social Links */}
-            <Box bg="white" p={6} borderRadius="lg" shadow="sm" border="1px solid" borderColor="gray.200">
-              <Heading size="md" mb={4}>Social Links</Heading>
-              <Stack gap={4}>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">Website</Text>
-                  <Input
-                    value={profileData.socialLinks.website}
-                    onChange={(e) => setProfileData(prev => ({
-                      ...prev,
-                      socialLinks: { ...prev.socialLinks, website: e.target.value }
-                    }))}
-                    placeholder="https://yourwebsite.com"
-                  />
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">LinkedIn</Text>
-                  <Input
-                    value={profileData.socialLinks.linkedin}
-                    onChange={(e) => setProfileData(prev => ({
-                      ...prev,
-                      socialLinks: { ...prev.socialLinks, linkedin: e.target.value }
-                    }))}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                  />
-                </Box>
-                <Box>
-                  <Text fontSize="sm" mb={1} fontWeight="medium">GitHub</Text>
-                  <Input
-                    value={profileData.socialLinks.github}
-                    onChange={(e) => setProfileData(prev => ({
-                      ...prev,
-                      socialLinks: { ...prev.socialLinks, github: e.target.value }
-                    }))}
-                    placeholder="https://github.com/yourusername"
-                  />
-                </Box>
-                <Button colorScheme="blue">
-                  <FiSave />
-                  <Text ml={2}>Update Links</Text>
-                </Button>
-              </Stack>
-            </Box>
-
-            {/* Danger Zone */}
-            <Box bg="red.50" border="2px solid" borderColor="red.200" p={6} borderRadius="lg">
-              <Heading size="md" color="red.700" mb={4}>Danger Zone</Heading>
-              <Stack gap={4}>
-                <Box>
-                  <Text fontWeight="medium" color="red.700" mb={1}>Deactivate Account</Text>
-                  <Text fontSize="sm" color="red.600" mb={2}>
-                    Temporarily disable your account. You can reactivate it anytime.
-                  </Text>
-                  <Button size="sm" colorScheme="red" variant="outline">
-                    Deactivate Account
-                  </Button>
-                </Box>
-                <Box>
-                  <Text fontWeight="medium" color="red.700" mb={1}>Delete Account</Text>
-                  <Text fontSize="sm" color="red.600" mb={2}>
-                    Permanently delete your account and all associated data. This cannot be undone.
-                  </Text>
-                  <Button size="sm" colorScheme="red">
-                    Delete Account
-                  </Button>
-                </Box>
-              </Stack>
-            </Box>
-          </Grid>
-        </Box>
-      )}
-
-      {/* Save Button for Edit Mode */}
-      {isEditing && (
-        <Box position="fixed" bottom={6} right={6} zIndex={1000}>
-          <Button
-            colorScheme="blue"
-            size="lg"
-            onClick={handleSaveProfile}
-            shadow="lg"
-          >
-            <FiSave />
-            <Text ml={2}>Save All Changes</Text>
-          </Button>
-        </Box>
-      )}
-    </Box>
+export default function ProfilePage() {
+  return (
+    <ErrorBoundary>
+      <ProfilePageContent />
+    </ErrorBoundary>
   );
 }

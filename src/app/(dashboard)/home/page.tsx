@@ -2,19 +2,39 @@
 import FloatingCurrencySelector from "@/components/CurrencySelector";
 import ServiceProvider from "@/components/dashboard/ServiceProvider";
 import ServiceRequester from "@/components/dashboard/ServiceRequester";
-import React, { useState } from "react";
-
-type UserType = "serviceProvider" | "serviceRequester";
+import { useUserRole } from "@/contexts/UserRoleContext";
+import React, { useState, useEffect } from "react";
 
 const Dashboard: React.FC = () => {
-  const [userType, setUserType] = useState<UserType>("serviceProvider");
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return (
+      <div className="dashboard-container">
+        <FloatingCurrencySelector />
+        {/* Default to ServiceRequester during SSR to prevent hydration mismatch */}
+        <ServiceRequester />
+      </div>
+    );
+  }
+
+  return <DashboardContent />;
+};
+
+const DashboardContent: React.FC = () => {
+  const { isProvider } = useUserRole();
+  
   return (
     <div className="dashboard-container">
       <FloatingCurrencySelector />
-      {userType === "serviceRequester" ? (
-        <ServiceRequester />
-      ) : (
+      {isProvider ? (
         <ServiceProvider />
+      ) : (
+        <ServiceRequester />
       )}
     </div>
   );

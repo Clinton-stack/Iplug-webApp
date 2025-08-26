@@ -21,6 +21,8 @@ import {
   FiEye,
 } from 'react-icons/fi';
 import { BsKanban } from 'react-icons/bs';
+import { useUserRole } from "@/contexts/UserRoleContext";
+import AccessRestriction from "@/components/ui/AccessRestriction";
 
 // Mock data for projects
 const mockProjects: Project[] = [
@@ -123,10 +125,22 @@ interface Project {
 }
 
 export default function MyProjectsPage() {
+  const { userRole } = useUserRole();
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
+
+  // Role-based access control - only Providers can access this page
+  if (userRole !== 'Provider') {
+    return (
+      <AccessRestriction
+        requiredRole="Provider"
+        pageName="My Jobs"
+        description="The My Jobs page is where you can manage your active projects and client work. Switch to Provider mode to view and manage your jobs as a service provider."
+      />
+    );
+  }
 
   const filteredProjects = mockProjects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

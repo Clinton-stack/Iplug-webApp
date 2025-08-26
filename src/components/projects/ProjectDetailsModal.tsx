@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
   Box,
   Flex,
   Text,
@@ -18,7 +12,6 @@ import {
   CardBody,
   CardHeader,
   Heading,
-  Divider,
   Avatar,
   Textarea,
   Alert,

@@ -1,5 +1,5 @@
-import CTA from "@/components/dashboard/dashboard-components/CTA";
-import { Grid, GridItem, Box, VStack, Flex } from "@chakra-ui/react";
+import CTAComponent from "@/components/dashboard/dashboard-components/CTA";
+import { Grid, GridItem, Box, VStack, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import IngeniousPay from "./dashboard-components/IngeniousPay";
 import ActiveProjectsCard from "./dashboard-components/ActiveProjects";
@@ -13,64 +13,79 @@ import ProfileCompletionTile from "./dashboard-components/ProfileCompletion";
 const ServiceRequester = () => {
   const customerName = "John Doe";
   const buttonName = "Post a Service Request";
-  return (
-    <Grid templateColumns="repeat(12, 1fr)" gap={6} p={3}>
-      {/* Left Column: CTA + Main Content */}
-      <GridItem colSpan={{ base: 12, lg: 9 }}>
-        <VStack gap={6} align="stretch">
-          {/* CTA */}
-          <Box className="dashboard-tile" minHeight="120px">
-            <CTA customerName={customerName} buttonName={buttonName} />
-          </Box>
 
-          {/* Projects + Spend */}
-          <Flex gap={6} flexWrap="wrap">
-            <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
+  return (
+    <Box p={6}>
+      {/* Dashboard Header */}
+      <Box mb={6}>
+        <Heading size="lg" color="gray.800" mb={2}>
+          Service Requester Dashboard
+        </Heading>
+        <Text color="gray.600" fontSize="sm">
+          For users seeking service providers to fulfill personal or business tasks.
+        </Text>
+      </Box>
+
+      <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+        {/* Left Column: Main Content */}
+        <GridItem colSpan={{ base: 12, lg: 8 }}>
+          <VStack gap={6} align="stretch">
+            {/* Welcome Banner with Quick CTA */}
+            <Box className="dashboard-tile" minHeight="120px">
+              <CTAComponent 
+                customerName={customerName} 
+                buttonName={buttonName}
+              />
+            </Box>
+
+            {/* Recent Activities */}
+            <Box className="dashboard-tile" minHeight="300px">
+              <RecentActivities />
+            </Box>
+
+            {/* Active & Ongoing Projects */}
+            <Box className="dashboard-tile" minHeight="350px">
               <ActiveProjectsCard />
             </Box>
-            <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
-            <SmartRecommendations />
-            </Box>
-          </Flex>
 
-          {/* Milestones + Inbox */}
-          <Flex gap={6} flexWrap="wrap">
-            <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
-              <UpcomingMilestones />
+            {/* Smart Recommendations (via Ingenious AI) */}
+            <Box className="dashboard-tile" minHeight="320px">
+              <SmartRecommendations />
             </Box>
-            <Box flex="1" minW="300px" className="dashboard-tile" minHeight="310px">
+          </VStack>
+        </GridItem>
+
+        {/* Right Column: Sidebar */}
+        <GridItem colSpan={{ base: 12, lg: 4 }}>
+          <VStack gap={6} align="stretch">
+            {/* Inbox Preview */}
+            <Box className="dashboard-tile" minHeight="280px">
               <Inbox />
             </Box>
-          </Flex>
-        </VStack>
-      </GridItem>
 
-      {/* Right Column: Sidebar starting from top */}
-      <GridItem colSpan={{ base: 12, lg: 3 }}>
-        <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(6, 1fr)", lg: "repeat(1, 1fr)" }} gap={6}>
-          <GridItem colSpan={{ base: 12, md: 3 }}>
-            <Box className="dashboard-tile" minHeight="200px">
-              <IngeniousPay buttonName={"Fund Wallet"}/>
+            {/* Upcoming Milestones */}
+            <Box className="dashboard-tile" minHeight="280px">
+              <UpcomingMilestones />
             </Box>
-          </GridItem>
-          <GridItem colSpan={{ base: 12, md: 3 }}>
+
+            {/* Wallet Snapshot (Ingenious Pay) */}
+            <Box className="dashboard-tile" minHeight="200px">
+              <IngeniousPay buttonName="Fund Wallet" />
+            </Box>
+
+            {/* Gamification & Rewards */}
             <Box className="dashboard-tile" minHeight="200px">
               <StatsAtAGlance />
             </Box>
-          </GridItem>
-          <GridItem colSpan={{ base: 12, md: 3 }}>
-            <Box className="dashboard-tile" minHeight="280px">
-              <RecentActivities />
-            </Box>
-          </GridItem>
-          <GridItem colSpan={{ base: 12, md: 3 }}>
+
+            {/* Profile Completion / Platform Tips */}
             <Box className="dashboard-tile" minHeight="180px">
-              <ProfileCompletionTile/>
+              <ProfileCompletionTile />
             </Box>
-          </GridItem>
-        </Grid>
-      </GridItem>
-    </Grid>
+          </VStack>
+        </GridItem>
+      </Grid>
+    </Box>
   );
 };
 

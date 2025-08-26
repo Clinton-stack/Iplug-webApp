@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -9,232 +8,399 @@ import {
   VStack,
   HStack,
   Grid,
-  Button,
+  Card,
+  Avatar,
   Badge,
+  Button,
+  Tabs,
   Input,
+  Flex,
+  IconButton,
+  Switch,
 } from '@chakra-ui/react';
 import {
   FiBell,
-  FiCheck,
-  FiDollarSign,
-  FiSettings,
-  FiCalendar,
-  FiUsers,
-  FiTarget,
   FiSearch,
   FiFilter,
+  FiSettings,
+  FiCheckCircle,
+  FiDollarSign,
+  FiMessageSquare,
+  FiGift,
+  FiShield,
+  FiTrendingUp,
   FiArchive,
   FiTrash2,
+  FiEye,
+  FiEyeOff,
+  FiVolumeX,
+  FiTarget,
+  FiAward,
+  FiChevronDown,
+  FiChevronUp,
+  FiBellOff,
+  FiHeart,
 } from 'react-icons/fi';
-
-// Custom Card Components for Chakra UI v3 compatibility
-const Card = ({ children, ...props }: any) => (
-  <Box bg="white" shadow="base" borderRadius="md" border="1px" borderColor="gray.200" {...props}>
-    {children}
-  </Box>
-);
-
-const CardHeader = ({ children }: any) => (
-  <Box p={4} borderBottom="1px" borderColor="gray.200">
-    {children}
-  </Box>
-);
-
-const CardBody = ({ children }: any) => (
-  <Box p={4}>
-    {children}
-  </Box>
-);
+import { useState } from 'react';
 
 // Interfaces
 interface Notification {
-  id: string;
-  type: 'system' | 'milestone' | 'payment' | 'ai_suggestion' | 'referral';
+  id: number;
+  category: 'project_updates' | 'messages' | 'milestones' | 'payments_finance' | 'gamification_rewards' | 'platform_alerts' | 'system_admin' | 'project_status' | 'milestone_approvals' | 'referrals' | 'security';
   title: string;
   message: string;
   timestamp: string;
   isRead: boolean;
-  priority: 'high' | 'medium' | 'low';
-  category: string;
-  actionUrl?: string;
-  actionText?: string;
-  metadata?: {
-    projectId?: string;
-    amount?: number;
-    dueDate?: string;
-    referralId?: string;
+  priority: 'low' | 'medium' | 'high';
+  actionButton?: {
+    text: string;
+    variant: 'solid' | 'outline';
+    colorScheme: string;
   };
+  avatar?: string;
+  clientName?: string;
+  providerName?: string;
+  projectTitle?: string;
+  amount?: number;
+  expandedContent?: string;
+  isFollowing?: boolean;
+  jobId?: string;
+  allowSilence?: boolean;
 }
 
-const NotificationsPage: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+interface NotificationPreferences {
+  categories: {
+    [key: string]: {
+      enabled: boolean;
+      email: boolean;
+      push: boolean;
+    };
+  };
+  silenceAll: boolean;
+  frequency: 'instant' | 'daily' | 'weekly';
+}
 
-  // Mock data
-  const notifications: Notification[] = [
-    {
-      id: '1',
-      type: 'system',
-      title: 'Platform Update Released',
-      message: '🔹 New messaging features and improved project management tools are now available.',
-      timestamp: '2025-08-22T10:30:00Z',
-      isRead: false,
-      priority: 'medium',
-      category: 'Platform Updates',
-      actionText: 'View Changes'
+// Mock Data - Service Requester
+const mockRequesterNotifications: Notification[] = [
+  {
+    id: 1,
+    category: 'milestone_approvals',
+    title: 'Milestone Ready for Approval',
+    message: 'Sarah Johnson has completed Milestone 2 of "E-commerce Website Design" and is awaiting your approval.',
+    timestamp: '2025-08-26T10:30:00Z',
+    isRead: false,
+    priority: 'high',
+    actionButton: {
+      text: 'Approve Milestone',
+      variant: 'solid',
+      colorScheme: 'green',
     },
-    {
-      id: '2',
-      type: 'milestone',
-      title: 'Project Deadline Approaching',
-      message: '🔹 "Mobile App Development" milestone is due in 2 days. Current progress: 75%',
-      timestamp: '2025-08-22T09:15:00Z',
-      isRead: false,
-      priority: 'high',
-      category: 'Due Dates',
-      metadata: {
-        projectId: 'PRJ-123',
-        dueDate: '2025-08-24'
-      },
-      actionText: 'View Project'
+    providerName: 'Sarah Johnson',
+    projectTitle: 'E-commerce Website Design',
+    expandedContent: 'Milestone 2: User Interface Design - All wireframes and high-fidelity mockups have been completed according to specifications. Includes responsive design for mobile and tablet views.',
+    isFollowing: false,
+    jobId: 'job-123',
+    allowSilence: true,
+  },
+  {
+    id: 2,
+    category: 'payments_finance',
+    title: 'Payment Release Required',
+    message: 'Milestone payment of $2,500 is ready to be released for "Mobile App Development".',
+    timestamp: '2025-08-26T09:15:00Z',
+    isRead: false,
+    priority: 'high',
+    actionButton: {
+      text: 'Release Payment',
+      variant: 'solid',
+      colorScheme: 'blue',
     },
-    {
-      id: '3',
-      type: 'payment',
-      title: 'Payout Processed',
-      message: '🔹 Your payout of ₦25,000 has been successfully sent to your bank account.',
-      timestamp: '2025-08-22T08:45:00Z',
-      isRead: true,
-      priority: 'medium',
-      category: 'Payout Updates',
-      metadata: {
-        amount: 25000
-      },
-      actionText: 'View Receipt'
+    providerName: 'Michael Chen',
+    projectTitle: 'Mobile App Development',
+    amount: 2500,
+    expandedContent: 'Payment Details: Milestone 3 completion - Backend API development and database integration. All acceptance criteria met and tested.',
+    isFollowing: true,
+    jobId: 'job-456',
+    allowSilence: false,
+  },
+  {
+    id: 3,
+    category: 'messages',
+    title: 'New Message from Provider',
+    message: 'Alex Rivera sent you a message regarding "Logo Design Project".',
+    timestamp: '2025-08-26T08:45:00Z',
+    isRead: false,
+    priority: 'medium',
+    actionButton: {
+      text: 'View Message',
+      variant: 'outline',
+      colorScheme: 'blue',
     },
-    {
-      id: '4',
-      type: 'payment',
-      title: 'Escrow Funded',
-      message: '🔹 Client has funded ₦15,000 into escrow for "Website Redesign" project.',
-      timestamp: '2025-08-21T16:20:00Z',
-      isRead: false,
-      priority: 'high',
-      category: 'Escrow Updates',
-      metadata: {
-        projectId: 'PRJ-124',
-        amount: 15000
-      },
-      actionText: 'Start Work'
+    providerName: 'Alex Rivera',
+    projectTitle: 'Logo Design Project',
+    expandedContent: 'Message preview: "Hi! I have completed the initial logo concepts and would love to get your feedback before proceeding to the next phase..."',
+    isFollowing: false,
+    jobId: 'job-789',
+    allowSilence: true,
+  },
+  {
+    id: 4,
+    category: 'project_status',
+    title: 'Project Deadline Approaching',
+    message: 'Your project "Website Redesign" with Emma Davis has 3 days remaining.',
+    timestamp: '2025-08-26T07:20:00Z',
+    isRead: true,
+    priority: 'medium',
+    providerName: 'Emma Davis',
+    projectTitle: 'Website Redesign',
+  },
+  {
+    id: 5,
+    category: 'referrals',
+    title: 'Referral Reward Earned',
+    message: 'You earned 200 referral points! Your referral to StartupXYZ was successful.',
+    timestamp: '2025-08-25T16:30:00Z',
+    isRead: true,
+    priority: 'low',
+    expandedContent: 'Referral Details: Jordan Smith was hired by StartupXYZ for their mobile development project. Your reward: 200 points ($20 credit).',
+  },
+  {
+    id: 6,
+    category: 'security',
+    title: 'KYC Verification Required',
+    message: 'Please complete your KYC verification to continue using payment services.',
+    timestamp: '2025-08-25T14:15:00Z',
+    isRead: false,
+    priority: 'high',
+    actionButton: {
+      text: 'Complete KYC',
+      variant: 'solid',
+      colorScheme: 'orange',
     },
-    {
-      id: '5',
-      type: 'ai_suggestion',
-      title: 'Perfect Job Match Found',
-      message: '🔹 New UI/UX project matches your skills perfectly. High-paying client with 5★ rating.',
-      timestamp: '2025-08-21T14:10:00Z',
-      isRead: false,
-      priority: 'high',
-      category: 'Job Suggestions',
-      actionText: 'View Job'
+    expandedContent: 'For security and compliance purposes, please upload a government-issued ID and proof of address. This is required for payments above $1,000.',
+  },
+  {
+    id: 7,
+    category: 'system_admin',
+    title: 'Platform Update Available',
+    message: 'New features are available! Check out enhanced project management tools.',
+    timestamp: '2025-08-25T12:00:00Z',
+    isRead: true,
+    priority: 'low',
+    actionButton: {
+      text: 'View Updates',
+      variant: 'outline',
+      colorScheme: 'purple',
     },
-    {
-      id: '6',
-      type: 'ai_suggestion',
-      title: 'Collaboration Opportunity',
-      message: '🔹 Team up with Sarah J. for a large e-commerce project. Your combined skills are perfect match.',
-      timestamp: '2025-08-21T12:30:00Z',
-      isRead: true,
-      priority: 'medium',
-      category: 'Collaboration Prompts',
-      actionText: 'View Details'
-    },
-    {
-      id: '7',
-      type: 'referral',
-      title: 'Referral Bonus Earned',
-      message: 'Your referral John Smith completed his first project. You earned ₦500 bonus!',
-      timestamp: '2025-08-21T11:15:00Z',
-      isRead: false,
-      priority: 'medium',
-      category: 'Referral Approvals',
-      metadata: {
-        referralId: 'REF-789',
-        amount: 500
-      },
-      actionText: 'View Earnings'
-    },
-    {
-      id: '8',
-      type: 'system',
-      title: 'Security Update',
-      message: '🔹 Enhanced security measures activated. Please review your account settings.',
-      timestamp: '2025-08-20T20:45:00Z',
-      isRead: true,
-      priority: 'high',
-      category: 'System Changes',
-      actionText: 'Review Settings'
-    },
-    {
-      id: '9',
-      type: 'milestone',
-      title: 'Milestone Completed',
-      message: '🔹 "Logo Design" milestone completed successfully. Payment released from escrow.',
-      timestamp: '2025-08-20T15:30:00Z',
-      isRead: true,
-      priority: 'medium',
-      category: 'Project Progress',
-      metadata: {
-        projectId: 'PRJ-125',
-        amount: 8000
-      },
-      actionText: 'View Project'
-    },
-    {
-      id: '10',
-      type: 'payment',
-      title: 'Payment Received',
-      message: '🔹 ₦12,500 payment received from client for completed work on "Brand Guidelines".',
-      timestamp: '2025-08-20T13:20:00Z',
-      isRead: true,
-      priority: 'medium',
-      category: 'Payment Updates',
-      metadata: {
-        amount: 12500
-      },
-      actionText: 'View Receipt'
-    }
-  ];
+    expandedContent: 'What\'s New: Advanced milestone tracking, improved messaging system, enhanced payment security, and new collaboration tools.',
+  },
+];
 
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'system': return FiSettings;
-      case 'milestone': return FiCalendar;
-      case 'payment': return FiDollarSign;
-      case 'ai_suggestion': return FiTarget;
-      case 'referral': return FiUsers;
-      default: return FiBell;
+// Mock Data - Service Provider
+const mockProviderNotifications: Notification[] = [
+  {
+    id: 1,
+    category: 'project_updates',
+    title: 'New Project Invitation',
+    message: 'TechStartup Inc. has invited you to work on their "Mobile Banking App" project.',
+    timestamp: '2025-08-26T11:15:00Z',
+    isRead: false,
+    priority: 'high',
+    actionButton: {
+      text: 'View Project',
+      variant: 'solid',
+      colorScheme: 'blue',
+    },
+    clientName: 'TechStartup Inc.',
+    projectTitle: 'Mobile Banking App',
+    amount: 5000,
+    expandedContent: 'Project Details: Full-stack mobile banking application with secure payment integration. Timeline: 8 weeks. Budget: $5,000.',
+  },
+  {
+    id: 2,
+    category: 'milestones',
+    title: 'Milestone Approved',
+    message: 'Great work! Your Milestone 1 for "E-commerce Website" has been approved.',
+    timestamp: '2025-08-26T10:45:00Z',
+    isRead: false,
+    priority: 'medium',
+    actionButton: {
+      text: 'Start Next Phase',
+      variant: 'solid',
+      colorScheme: 'green',
+    },
+    clientName: 'RetailCorp',
+    projectTitle: 'E-commerce Website',
+    amount: 1500,
+    expandedContent: 'Milestone 1: Initial wireframes and design concepts have been approved. Payment of $1,500 has been released to your account.',
+  },
+  {
+    id: 3,
+    category: 'payments_finance',
+    title: 'Payment Received',
+    message: 'You received $2,000 for completing "Logo Design" project.',
+    timestamp: '2025-08-26T09:30:00Z',
+    isRead: false,
+    priority: 'medium',
+    actionButton: {
+      text: 'Withdraw Earnings',
+      variant: 'outline',
+      colorScheme: 'green',
+    },
+    clientName: 'Brand Agency',
+    projectTitle: 'Logo Design',
+    amount: 2000,
+    expandedContent: 'Payment Details: Final payment for logo design project. Funds are now available in your account balance.',
+  },
+  {
+    id: 4,
+    category: 'messages',
+    title: 'New Message from Client',
+    message: 'StartupXYZ sent you a message about project requirements.',
+    timestamp: '2025-08-26T08:15:00Z',
+    isRead: true,
+    priority: 'medium',
+    actionButton: {
+      text: 'Reply',
+      variant: 'outline',
+      colorScheme: 'blue',
+    },
+    clientName: 'StartupXYZ',
+    projectTitle: 'Web App Development',
+    expandedContent: 'Message preview: "Hi! We need to discuss some changes to the user authentication flow. Can we schedule a call tomorrow?"',
+  },
+  {
+    id: 5,
+    category: 'gamification_rewards',
+    title: 'Achievement Unlocked!',
+    message: 'Congratulations! You\'ve earned the "Top Performer" badge for excellent ratings.',
+    timestamp: '2025-08-25T17:20:00Z',
+    isRead: false,
+    priority: 'low',
+    actionButton: {
+      text: 'View Profile',
+      variant: 'outline',
+      colorScheme: 'purple',
+    },
+    expandedContent: 'Achievement Details: You\'ve maintained a 4.9+ star rating across 25+ completed projects. This badge increases your profile visibility by 20%.',
+  },
+  {
+    id: 6,
+    category: 'platform_alerts',
+    title: 'Profile Views Increased',
+    message: 'Your profile was viewed 45 times this week - up 25% from last week!',
+    timestamp: '2025-08-25T15:30:00Z',
+    isRead: true,
+    priority: 'low',
+    actionButton: {
+      text: 'View Analytics',
+      variant: 'outline',
+      colorScheme: 'blue',
+    },
+    expandedContent: 'Profile Analytics: 45 views this week, 15 shortlists, 3 direct messages. Your "React Development" skills are trending.',
+  },
+  {
+    id: 7,
+    category: 'system_admin',
+    title: 'Tax Document Ready',
+    message: 'Your 1099 tax document for 2024 is ready for download.',
+    timestamp: '2025-08-25T12:45:00Z',
+    isRead: false,
+    priority: 'high',
+    actionButton: {
+      text: 'Download',
+      variant: 'solid',
+      colorScheme: 'orange',
+    },
+    expandedContent: 'Tax Information: Your 2024 earnings summary and 1099 form are available. Total reported income: $45,000.',
+  },
+  {
+    id: 8,
+    category: 'project_updates',
+    title: 'Project Deadline Reminder',
+    message: 'Reminder: "Website Redesign" project deadline is in 2 days.',
+    timestamp: '2025-08-25T11:00:00Z',
+    isRead: true,
+    priority: 'medium',
+    clientName: 'Design Agency',
+    projectTitle: 'Website Redesign',
+    expandedContent: 'Project Status: 85% complete. Remaining tasks: final testing and client review. Estimated completion: Tomorrow.',
+  },
+];
+
+const defaultRequesterPreferences: NotificationPreferences = {
+  categories: {
+    project_status: { enabled: true, email: true, push: true },
+    milestone_approvals: { enabled: true, email: true, push: true },
+    payments_finance: { enabled: true, email: true, push: true },
+    messages: { enabled: true, email: false, push: true },
+    referrals: { enabled: true, email: false, push: false },
+    system_admin: { enabled: true, email: false, push: false },
+    security: { enabled: true, email: true, push: true },
+  },
+  silenceAll: false,
+  frequency: 'instant',
+};
+
+const defaultProviderPreferences: NotificationPreferences = {
+  categories: {
+    project_updates: { enabled: true, email: true, push: true },
+    messages: { enabled: true, email: false, push: true },
+    milestones: { enabled: true, email: true, push: true },
+    payments_finance: { enabled: true, email: true, push: true },
+    gamification_rewards: { enabled: true, email: false, push: true },
+    platform_alerts: { enabled: true, email: false, push: false },
+    system_admin: { enabled: true, email: true, push: false },
+  },
+  silenceAll: false,
+  frequency: 'instant',
+};
+
+// Component Definitions
+const NotificationCard = ({ 
+  notification, 
+  onMarkRead, 
+  onArchive, 
+  onDelete,
+  onSilence,
+  onFollow
+}: { 
+  notification: Notification;
+  onMarkRead: (id: number) => void;
+  onArchive: (id: number) => void;
+  onDelete: (id: number) => void;
+  onSilence?: (id: number, jobId?: string) => void;
+  onFollow?: (id: number, providerName?: string) => void;
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      // Requester categories
+      case 'project_status': return <FiTarget color="#3182ce" />;
+      case 'milestone_approvals': return <FiCheckCircle color="#38a169" />;
+      case 'referrals': return <FiGift color="#38a169" />;
+      case 'security': return <FiShield color="#e53e3e" />;
+      // Provider categories
+      case 'project_updates': return <FiTarget color="#3182ce" />;
+      case 'milestones': return <FiCheckCircle color="#2563eb" />;
+      case 'gamification_rewards': return <FiAward color="#7c3aed" />;
+      case 'platform_alerts': return <FiTrendingUp color="#0891b2" />;
+      // Shared categories
+      case 'messages': return <FiMessageSquare color="#805ad5" />;
+      case 'payments_finance': return <FiDollarSign color="#059669" />;
+      case 'system_admin': return <FiSettings color="#6b7280" />;
+      default: return <FiBell color="#718096" />;
     }
   };
 
-  const getNotificationColor = (type: string, priority: string) => {
-    if (priority === 'high') return 'red.500';
-    switch (type) {
-      case 'system': return 'blue.500';
-      case 'milestone': return 'orange.500';
-      case 'payment': return 'green.500';
-      case 'ai_suggestion': return 'purple.500';
-      case 'referral': return 'cyan.500';
-      default: return 'gray.500';
-    }
-  };
-
-  const getPriorityBadgeColor = (priority: string) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'red';
-      case 'medium': return 'yellow';
-      case 'low': return 'green';
+      case 'medium': return 'orange';
+      case 'low': return 'gray';
       default: return 'gray';
     }
   };
@@ -242,386 +408,609 @@ const NotificationsPage: React.FC = () => {
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffHours < 1) return 'Just now';
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
-  };
-
-  const filteredNotifications = notifications.filter(notification => {
-    const matchesFilter = activeFilter === 'all' || notification.type === activeFilter;
-    const matchesRead = !showUnreadOnly || !notification.isRead;
-    const matchesSearch = searchQuery === '' || 
-      notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notification.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notification.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
-    return matchesFilter && matchesRead && matchesSearch;
-  });
-
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-
-  const filterOptions = [
-    { key: 'all', label: 'All Notifications', icon: FiBell },
-    { key: 'system', label: 'System Notifications', icon: FiSettings },
-    { key: 'milestone', label: 'Milestone Reminders', icon: FiCalendar },
-    { key: 'payment', label: 'Payment Updates', icon: FiDollarSign },
-    { key: 'ai_suggestion', label: 'AI Suggestions', icon: FiTarget },
-    { key: 'referral', label: 'Referral Updates', icon: FiUsers },
-  ];
-
-  const markAsRead = (id: string) => {
-    // In real app, this would update the backend
-    console.log(`Marking notification ${id} as read`);
-  };
-
-  const markAllAsRead = () => {
-    // In real app, this would update the backend
-    console.log('Marking all notifications as read');
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes}m ago`;
+    } else if (diffInMinutes < 1440) {
+      return `${Math.floor(diffInMinutes / 60)}h ago`;
+    } else {
+      return `${Math.floor(diffInMinutes / 1440)}d ago`;
+    }
   };
 
   return (
-    <Container maxW="7xl" py={8}>
-      <VStack gap={6} align="stretch">
-        {/* Header */}
-        <Box>
-          <HStack gap={3} mb={2} justify="space-between">
-            <HStack gap={3}>
-              <FiBell size={32} color="#3182ce" />
-              <Heading size="xl">Notifications</Heading>
-              <Badge colorScheme="blue" px={2} py={1} fontSize="sm">
-                Alerts Hub
-              </Badge>
-              {unreadCount > 0 && (
-                <Badge colorScheme="red" px={2} py={1} fontSize="sm">
-                  {unreadCount} unread
-                </Badge>
+    <Card.Root 
+      borderRadius="lg" 
+      shadow="sm" 
+      borderLeft={notification.priority === 'high' ? '4px solid' : undefined}
+      borderLeftColor={notification.priority === 'high' ? 'red.500' : undefined}
+      bg={notification.isRead ? 'white' : (notification.priority === 'high' ? 'red.50' : 'blue.50')}
+      _hover={{ shadow: 'md' }}
+      border={notification.priority === 'high' ? '1px solid' : undefined}
+      borderColor={notification.priority === 'high' ? 'red.200' : undefined}
+    >
+      <Card.Body p={4}>
+        <VStack gap={3} align="stretch">
+          {/* Header */}
+          <HStack justify="space-between" align="start">
+            <HStack gap={3} flex={1}>
+              <Box p={2} bg="gray.100" borderRadius="full">
+                {getCategoryIcon(notification.category)}
+              </Box>
+              <Box flex={1}>
+                <HStack gap={2} mb={1}>
+                  <Heading 
+                    size="sm" 
+                    fontWeight={notification.priority === 'high' ? 'bold' : (notification.isRead ? 'normal' : 'semibold')}
+                    color={notification.priority === 'high' ? 'red.600' : 'inherit'}
+                  >
+                    {notification.title}
+                  </Heading>
+                  <Badge 
+                    size="sm" 
+                    colorScheme={getPriorityColor(notification.priority)}
+                    variant="outline"
+                  >
+                    {notification.priority}
+                  </Badge>
+                  {!notification.isRead && (
+                    <Badge size="sm" colorScheme="blue" variant="solid">
+                      New
+                    </Badge>
+                  )}
+                </HStack>
+                <Text fontSize="sm" color="gray.600" mb={2}>
+                  {notification.message}
+                </Text>
+                
+                {/* Provider/Client/Project Info */}
+                {(notification.providerName || notification.clientName) && (
+                  <HStack gap={2} mb={2}>
+                    <Avatar.Root size="xs">
+                      {notification.avatar ? (
+                        <Avatar.Image src={notification.avatar} alt={notification.providerName || notification.clientName} />
+                      ) : null}
+                      <Avatar.Fallback>
+                        {(notification.providerName || notification.clientName || '').split(' ').map(n => n[0]).join('')}
+                      </Avatar.Fallback>
+                    </Avatar.Root>
+                    <Text fontSize="xs" color="gray.500">
+                      {notification.providerName || notification.clientName}
+                      {notification.projectTitle && ` • ${notification.projectTitle}`}
+                      {notification.amount && ` • $${notification.amount.toLocaleString()}`}
+                    </Text>
+                  </HStack>
+                )}
+              </Box>
+            </HStack>
+            
+            {/* Actions */}
+            <HStack gap={1}>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label={notification.isRead ? 'Mark as unread' : 'Mark as read'}
+                onClick={() => onMarkRead(notification.id)}
+              >
+                {notification.isRead ? <FiEyeOff /> : <FiEye />}
+              </IconButton>
+              
+              {/* Follow Provider Thread - Only for Service Requesters with provider */}
+              {notification.providerName && onFollow && (
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={notification.isFollowing ? 'Unfollow' : 'Follow thread'}
+                  onClick={() => onFollow(notification.id, notification.providerName)}
+                  color={notification.isFollowing ? 'blue.500' : 'gray.500'}
+                >
+                  <FiHeart />
+                </IconButton>
+              )}
+              
+              {/* Silence Job Notifications */}
+              {notification.allowSilence && onSilence && (
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label="Do not notify me again"
+                  onClick={() => onSilence(notification.id, notification.jobId)}
+                >
+                  <FiBellOff />
+                </IconButton>
+              )}
+              
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label="Archive notification"
+                onClick={() => onArchive(notification.id)}
+              >
+                <FiArchive />
+              </IconButton>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label="Delete notification"
+                onClick={() => onDelete(notification.id)}
+              >
+                <FiTrash2 />
+              </IconButton>
+            </HStack>
+          </HStack>
+
+          {/* Action Button and Timestamp */}
+          <HStack justify="space-between" align="center">
+            <HStack gap={2}>
+              {notification.actionButton && (
+                <Button 
+                  size="sm" 
+                  variant={notification.actionButton.variant}
+                  colorScheme={notification.actionButton.colorScheme}
+                >
+                  {notification.actionButton.text}
+                </Button>
+              )}
+              {notification.expandedContent && (
+                <Button size="sm" variant="ghost" onClick={toggleExpanded}>
+                  {isExpanded ? <FiChevronUp /> : <FiChevronDown />}
+                  Details
+                </Button>
               )}
             </HStack>
+            <Text fontSize="xs" color="gray.500">
+              {formatTimestamp(notification.timestamp)}
+            </Text>
+          </HStack>
+
+          {/* Expanded Content */}
+          {notification.expandedContent && isExpanded && (
+            <Box mt={3} p={3} bg="gray.50" borderRadius="md">
+              <Text fontSize="sm" color="gray.700">
+                {notification.expandedContent}
+              </Text>
+            </Box>
+          )}
+        </VStack>
+      </Card.Body>
+    </Card.Root>
+  );
+};
+
+const PreferencesPanel = ({ 
+  preferences, 
+  onPreferencesChange,
+  isProvider = false
+}: { 
+  preferences: NotificationPreferences;
+  onPreferencesChange: (preferences: NotificationPreferences) => void;
+  isProvider?: boolean;
+}) => {
+  const requesterCategoryLabels = {
+    project_status: 'Project Status',
+    milestone_approvals: 'Milestone Approvals',
+    payments_finance: 'Payments & Escrow',
+    messages: 'Messages',
+    referrals: 'Referrals & Rewards',
+    system_admin: 'System Announcements',
+    security: 'Security / KYC / Account',
+  };
+
+  const providerCategoryLabels = {
+    project_updates: 'Project Updates',
+    messages: 'Messages',
+    milestones: 'Milestones',
+    payments_finance: 'Payments & Finance',
+    gamification_rewards: 'Gamification & Rewards',
+    platform_alerts: 'Platform Alerts',
+    system_admin: 'System / Admin Notices',
+  };
+
+  const categoryLabels = isProvider ? providerCategoryLabels : requesterCategoryLabels;
+
+  const updateCategoryPreference = (category: string, field: 'enabled' | 'email' | 'push', value: boolean) => {
+    const newPreferences = {
+      ...preferences,
+      categories: {
+        ...preferences.categories,
+        [category]: {
+          ...preferences.categories[category],
+          [field]: value,
+        },
+      },
+    };
+    onPreferencesChange(newPreferences);
+  };
+
+  const toggleSilenceAll = (silenced: boolean) => {
+    onPreferencesChange({
+      ...preferences,
+      silenceAll: silenced,
+    });
+  };
+
+  return (
+    <Card.Root>
+      <Card.Body p={6}>
+        <VStack gap={6} align="stretch">
+          <Heading size="md">Notification Preferences</Heading>
+
+          {/* Silence All Toggle */}
+          <HStack justify="space-between" p={4} bg="red.50" borderRadius="md" borderLeft="4px solid" borderLeftColor="red.500">
+            <VStack align="start" gap={1}>
+              <HStack>
+                <FiVolumeX color="#e53e3e" />
+                <Text fontWeight="semibold">Silence All Notifications</Text>
+              </HStack>
+              <Text fontSize="sm" color="gray.600">
+                Temporarily disable all notifications
+              </Text>
+            </VStack>
+            <Switch.Root 
+              checked={preferences.silenceAll}
+              onCheckedChange={(details) => toggleSilenceAll(details.checked)}
+            >
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+            </Switch.Root>
+          </HStack>
+
+          {/* Category Preferences */}
+          <VStack gap={4} align="stretch">
+            <Heading size="sm">Category Settings</Heading>
+            {Object.entries(categoryLabels).map(([category, label]) => {
+              const categoryPrefs = preferences.categories[category];
+              if (!categoryPrefs) return null;
+              return (
+                <Card.Root key={category} variant="outline">
+                  <Card.Body p={4}>
+                    <VStack gap={3} align="stretch">
+                      <HStack justify="space-between">
+                        <Text fontWeight="semibold">{label}</Text>
+                        <Switch.Root 
+                          checked={categoryPrefs.enabled}
+                          onCheckedChange={(details) => updateCategoryPreference(category, 'enabled', details.checked)}
+                          disabled={preferences.silenceAll}
+                        >
+                          <Switch.Control>
+                            <Switch.Thumb />
+                          </Switch.Control>
+                        </Switch.Root>
+                      </HStack>
+                      
+                      {categoryPrefs.enabled && !preferences.silenceAll && (
+                        <Grid templateColumns="1fr 1fr" gap={4} pl={4}>
+                          <HStack justify="space-between">
+                            <Text fontSize="sm" color="gray.600">Email notifications</Text>
+                            <Switch.Root 
+                              size="sm"
+                              checked={categoryPrefs.email}
+                              onCheckedChange={(details) => updateCategoryPreference(category, 'email', details.checked)}
+                            >
+                              <Switch.Control>
+                                <Switch.Thumb />
+                              </Switch.Control>
+                            </Switch.Root>
+                          </HStack>
+                          <HStack justify="space-between">
+                            <Text fontSize="sm" color="gray.600">Push notifications</Text>
+                            <Switch.Root 
+                              size="sm"
+                              checked={categoryPrefs.push}
+                              onCheckedChange={(details) => updateCategoryPreference(category, 'push', details.checked)}
+                            >
+                              <Switch.Control>
+                                <Switch.Thumb />
+                              </Switch.Control>
+                            </Switch.Root>
+                          </HStack>
+                        </Grid>
+                      )}
+                    </VStack>
+                  </Card.Body>
+                </Card.Root>
+              );
+            })}
+          </VStack>
+
+          {/* Frequency Settings */}
+          <VStack gap={4} align="stretch">
+            <Heading size="sm">Notification Frequency</Heading>
+            <Card.Root variant="outline">
+              <Card.Body p={4}>
+                <VStack gap={3} align="stretch">
+                  <Text fontWeight="semibold">Delivery Schedule</Text>
+                  <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+                    {['instant', 'daily', 'weekly'].map((freq) => (
+                      <Button
+                        key={freq}
+                        size="sm"
+                        variant={preferences.frequency === freq ? 'solid' : 'outline'}
+                        colorScheme={preferences.frequency === freq ? 'blue' : 'gray'}
+                        onClick={() => onPreferencesChange({
+                          ...preferences,
+                          frequency: freq as 'instant' | 'daily' | 'weekly'
+                        })}
+                        disabled={preferences.silenceAll}
+                      >
+                        {freq.charAt(0).toUpperCase() + freq.slice(1)}
+                      </Button>
+                    ))}
+                  </Grid>
+                  <Text fontSize="xs" color="gray.500">
+                    {preferences.frequency === 'instant' && 'Receive notifications immediately'}
+                    {preferences.frequency === 'daily' && 'Receive a daily summary at 9 AM'}
+                    {preferences.frequency === 'weekly' && 'Receive a weekly summary on Mondays'}
+                  </Text>
+                </VStack>
+              </Card.Body>
+            </Card.Root>
+          </VStack>
+        </VStack>
+      </Card.Body>
+    </Card.Root>
+  );
+};
+
+const NotificationsPage = () => {
+  const [isProvider, setIsProvider] = useState(false);
+  const [notifications, setNotifications] = useState(isProvider ? mockProviderNotifications : mockRequesterNotifications);
+  const [preferences, setPreferences] = useState(isProvider ? defaultProviderPreferences : defaultRequesterPreferences);
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showPreferences, setShowPreferences] = useState(false);
+
+  // Update notifications and preferences when role changes
+  const handleRoleSwitch = (checked: boolean) => {
+    setIsProvider(checked);
+    setNotifications(checked ? mockProviderNotifications : mockRequesterNotifications);
+    setPreferences(checked ? defaultProviderPreferences : defaultRequesterPreferences);
+    setActiveTab('all');
+  };
+
+  // Tab configuration based on user type
+  const requesterTabs = [
+    { id: 'all', label: 'All', icon: FiBell, count: notifications.length },
+    { id: 'project_status', label: 'Project Status', icon: FiTarget, count: notifications.filter(n => n.category === 'project_status').length },
+    { id: 'milestone_approvals', label: 'Milestone Approvals', icon: FiCheckCircle, count: notifications.filter(n => n.category === 'milestone_approvals').length },
+    { id: 'payments_finance', label: 'Payments & Escrow', icon: FiDollarSign, count: notifications.filter(n => n.category === 'payments_finance').length },
+    { id: 'messages', label: 'Messages', icon: FiMessageSquare, count: notifications.filter(n => n.category === 'messages').length },
+    { id: 'referrals', label: 'Referrals & Rewards', icon: FiGift, count: notifications.filter(n => n.category === 'referrals').length },
+    { id: 'system_admin', label: 'System Announcements', icon: FiSettings, count: notifications.filter(n => n.category === 'system_admin').length },
+    { id: 'security', label: 'Security / KYC / Account', icon: FiShield, count: notifications.filter(n => n.category === 'security').length },
+  ];
+
+  const providerTabs = [
+    { id: 'all', label: 'All', icon: FiBell, count: notifications.length },
+    { id: 'project_updates', label: 'Project Updates', icon: FiTarget, count: notifications.filter(n => n.category === 'project_updates').length },
+    { id: 'messages', label: 'Messages', icon: FiMessageSquare, count: notifications.filter(n => n.category === 'messages').length },
+    { id: 'milestones', label: 'Milestones', icon: FiCheckCircle, count: notifications.filter(n => n.category === 'milestones').length },
+    { id: 'payments_finance', label: 'Payments & Finance', icon: FiDollarSign, count: notifications.filter(n => n.category === 'payments_finance').length },
+    { id: 'gamification_rewards', label: 'Gamification & Rewards', icon: FiAward, count: notifications.filter(n => n.category === 'gamification_rewards').length },
+    { id: 'platform_alerts', label: 'Platform Alerts', icon: FiTrendingUp, count: notifications.filter(n => n.category === 'platform_alerts').length },
+    { id: 'system_admin', label: 'System / Admin Notices', icon: FiSettings, count: notifications.filter(n => n.category === 'system_admin').length },
+  ];
+
+  const tabs = isProvider ? providerTabs : requesterTabs;
+
+  // Filter notifications
+  const filteredNotifications = notifications.filter(notification => {
+    const matchesTab = activeTab === 'all' || notification.category === activeTab;
+    const matchesSearch = searchTerm === '' || 
+      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (notification.providerName && notification.providerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (notification.clientName && notification.clientName.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    return matchesTab && matchesSearch;
+  });
+
+  // Notification actions
+  const handleMarkRead = (id: number) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, isRead: !n.isRead } : n
+    ));
+  };
+
+  const handleArchive = (id: number) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+
+  const handleDelete = (id: number) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+
+  // New Service Requester specific actions
+  const handleSilence = (id: number, jobId?: string) => {
+    // Remove notification and potentially silence future notifications for this job
+    setNotifications(notifications.filter(n => n.id !== id));
+    // In a real app, you would also send this to the backend to silence future notifications
+    console.log(`Silenced notifications for job: ${jobId}`);
+  };
+
+  const handleFollow = (id: number, providerName?: string) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, isFollowing: !n.isFollowing } : n
+    ));
+    console.log(`${notifications.find(n => n.id === id)?.isFollowing ? 'Unfollowed' : 'Followed'} thread for provider: ${providerName}`);
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+  };
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const highPriorityCount = notifications.filter(n => n.priority === 'high' && !n.isRead).length;
+
+  return (
+    <Container maxW="7xl" py={8}>
+      <VStack gap={8} align="stretch">
+        {/* Header */}
+        <Box>
+          <HStack gap={3} mb={4} justify="space-between">
+            <HStack gap={3}>
+              <Box p={2} bg="blue.100" borderRadius="lg">
+                <FiBell size={24} color="#3182ce" />
+              </Box>
+              <VStack align="start" gap={0}>
+                <HStack gap={3}>
+                  <Heading>Notifications</Heading>
+                  <Badge colorScheme={isProvider ? "purple" : "blue"} variant="outline">
+                    {isProvider ? "Provider" : "Requester"} View
+                  </Badge>
+                </HStack>
+                <HStack gap={4}>
+                  <Text fontSize="sm" color="gray.600">
+                    {unreadCount} unread
+                  </Text>
+                  {highPriorityCount > 0 && (
+                    <Badge colorScheme="red" variant="solid">
+                      {highPriorityCount} urgent
+                    </Badge>
+                  )}
+                </HStack>
+              </VStack>
+            </HStack>
+            
             <HStack gap={2}>
-              <Button size="sm" variant="outline" onClick={markAllAsRead}>
-                <FiCheck style={{ marginRight: '8px' }} size={14} />
+              {/* Role Switch */}
+              <HStack gap={3} mr={4}>
+                <Text fontSize="sm" color="gray.600">Requester</Text>
+                <Switch.Root checked={isProvider} onCheckedChange={(details) => handleRoleSwitch(details.checked)}>
+                  <Switch.Control>
+                    <Switch.Thumb />
+                  </Switch.Control>
+                </Switch.Root>
+                <Text fontSize="sm" color="gray.600">Provider</Text>
+              </HStack>
+              
+              <Button variant="outline" onClick={markAllAsRead} disabled={unreadCount === 0}>
+                <FiCheckCircle />
                 Mark All Read
               </Button>
-              <Button size="sm" variant="outline">
-                <FiSettings style={{ marginRight: '8px' }} size={14} />
+              <Button 
+                variant="outline" 
+                onClick={() => setShowPreferences(!showPreferences)}
+              >
+                <FiSettings />
                 Settings
               </Button>
             </HStack>
           </HStack>
-          <Text color="gray.600" fontSize="lg">
-            All important alerts from Plug, project updates, payment milestones, or messages.
+          
+          <Text color="gray.600">
+            {isProvider 
+              ? "Stay updated on project invitations, milestone approvals, payments, achievements, and platform activities"
+              : "Stay updated on project milestones, payments, messages, and important account activities"
+            }
           </Text>
         </Box>
 
-        {/* Notification Stats */}
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(4, 1fr)' }} gap={4}>
-          <Card>
-            <CardBody textAlign="center">
-              <FiSettings size={20} color="#3182ce" style={{ margin: '0 auto 8px' }} />
-              <Text fontSize="xl" fontWeight="bold" color="blue.500">
-                {notifications.filter(n => n.type === 'system').length}
-              </Text>
-              <Text fontSize="sm" color="gray.600">System Updates</Text>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardBody textAlign="center">
-              <FiCalendar size={20} color="#dd6b20" style={{ margin: '0 auto 8px' }} />
-              <Text fontSize="xl" fontWeight="bold" color="orange.500">
-                {notifications.filter(n => n.type === 'milestone').length}
-              </Text>
-              <Text fontSize="sm" color="gray.600">Milestone Alerts</Text>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardBody textAlign="center">
-              <FiDollarSign size={20} color="#38a169" style={{ margin: '0 auto 8px' }} />
-              <Text fontSize="xl" fontWeight="bold" color="green.500">
-                {notifications.filter(n => n.type === 'payment').length}
-              </Text>
-              <Text fontSize="sm" color="gray.600">Payment Updates</Text>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardBody textAlign="center">
-              <FiTarget size={20} color="#805ad5" style={{ margin: '0 auto 8px' }} />
-              <Text fontSize="xl" fontWeight="bold" color="purple.500">
-                {notifications.filter(n => n.type === 'ai_suggestion').length}
-              </Text>
-              <Text fontSize="sm" color="gray.600">AI Suggestions</Text>
-            </CardBody>
-          </Card>
-        </Grid>
-
-        {/* Filters and Search */}
-        <Card>
-          <CardHeader>
-            <HStack gap={4} flexWrap="wrap" justify="space-between">
-              <HStack gap={2} flexWrap="wrap">
-                {filterOptions.map((filter) => (
-                  <Button
-                    key={filter.key}
-                    size="sm"
-                    variant={activeFilter === filter.key ? "solid" : "ghost"}
-                    colorScheme={activeFilter === filter.key ? "blue" : "gray"}
-                    onClick={() => setActiveFilter(filter.key)}
-                  >
-                    <filter.icon style={{ marginRight: '8px' }} size={14} />
-                    {filter.label}
-                  </Button>
-                ))}
-              </HStack>
-
-              <HStack gap={2}>
-                <HStack gap={2}>
-                  <FiSearch color="#9ca3af" />
-                  <Input
-                    size="sm"
-                    maxW="200px"
-                    placeholder="Search notifications..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </HStack>
-                <Button
-                  size="sm"
-                  variant={showUnreadOnly ? "solid" : "outline"}
-                  colorScheme={showUnreadOnly ? "red" : "gray"}
-                  onClick={() => setShowUnreadOnly(!showUnreadOnly)}
-                >
-                  <FiFilter style={{ marginRight: '4px' }} size={12} />
-                  Unread Only
-                </Button>
-              </HStack>
+        {/* Search */}
+        <Card.Root p={4}>
+          <Card.Body>
+            <HStack gap={4}>
+              <Box position="relative" flex={1}>
+                <FiSearch 
+                  style={{ 
+                    position: 'absolute', 
+                    left: 12, 
+                    top: '50%', 
+                    transform: 'translateY(-50%)',
+                    color: '#718096'
+                  }} 
+                />
+                <Input
+                  pl={10}
+                  placeholder="Search notifications..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Box>
+              <Button variant="outline">
+                <FiFilter />
+                Filter
+              </Button>
             </HStack>
-          </CardHeader>
+          </Card.Body>
+        </Card.Root>
 
-          <CardBody>
-            <VStack gap={4} align="stretch">
-              {filteredNotifications.length === 0 ? (
-                <Box textAlign="center" py={8}>
-                  <FiBell size={48} color="#d1d5db" style={{ margin: '0 auto 16px' }} />
-                  <Text color="gray.500" fontSize="lg" mb={2}>No notifications found</Text>
-                  <Text fontSize="sm" color="gray.400">
-                    {searchQuery ? 'Try adjusting your search terms' : 'All caught up! Check back later for updates.'}
-                  </Text>
-                </Box>
-              ) : (
-                filteredNotifications.map((notification) => (
-                  <Card 
-                    key={notification.id} 
-                    bg={notification.isRead ? "white" : "blue.50"}
-                    borderColor={notification.isRead ? "gray.200" : "blue.200"}
-                    borderWidth={notification.isRead ? "1px" : "2px"}
-                  >
-                    <CardBody>
-                      <HStack gap={4} align="start">
-                        <Box position="relative">
-                          {React.createElement(getNotificationIcon(notification.type), {
-                            size: 24,
-                            color: getNotificationColor(notification.type, notification.priority)
-                          })}
-                          {!notification.isRead && (
-                            <Box
-                              position="absolute"
-                              top="-2px"
-                              right="-2px"
-                              w="8px"
-                              h="8px"
-                              borderRadius="full"
-                              bg="red.500"
-                            />
-                          )}
-                        </Box>
-
-                        <VStack align="stretch" flex={1} gap={2}>
-                          <HStack justify="space-between" align="start">
-                            <VStack align="start" gap={1} flex={1}>
-                              <HStack gap={2} flexWrap="wrap">
-                                <Text fontWeight="bold" color={notification.isRead ? "gray.700" : "gray.900"}>
-                                  {notification.title}
-                                </Text>
-                                <Badge 
-                                  size="sm" 
-                                  colorScheme={getPriorityBadgeColor(notification.priority)}
-                                  variant="outline"
-                                >
-                                  {notification.priority}
-                                </Badge>
-                                <Badge size="sm" variant="outline" colorScheme="gray">
-                                  {notification.category}
-                                </Badge>
-                              </HStack>
-                              
-                              <Text 
-                                fontSize="sm" 
-                                color={notification.isRead ? "gray.600" : "gray.800"}
-                                lineHeight="1.5"
-                              >
-                                {notification.message}
-                              </Text>
-
-                              {notification.metadata && (
-                                <HStack gap={4} fontSize="xs" color="gray.500" mt={1}>
-                                  {notification.metadata.amount && (
-                                    <HStack gap={1}>
-                                      <FiDollarSign size={12} />
-                                      <Text>₦{notification.metadata.amount.toLocaleString()}</Text>
-                                    </HStack>
-                                  )}
-                                  {notification.metadata.dueDate && (
-                                    <HStack gap={1}>
-                                      <FiCalendar size={12} />
-                                      <Text>Due: {new Date(notification.metadata.dueDate).toLocaleDateString()}</Text>
-                                    </HStack>
-                                  )}
-                                  {notification.metadata.projectId && (
-                                    <HStack gap={1}>
-                                      <FiTarget size={12} />
-                                      <Text>{notification.metadata.projectId}</Text>
-                                    </HStack>
-                                  )}
-                                </HStack>
-                              )}
-                            </VStack>
-
-                            <VStack align="end" gap={2}>
-                              <Text fontSize="xs" color="gray.500">
-                                {formatTimestamp(notification.timestamp)}
-                              </Text>
-                              <HStack gap={1}>
-                                {!notification.isRead && (
-                                  <Button 
-                                    size="xs" 
-                                    variant="outline" 
-                                    colorScheme="blue"
-                                    onClick={() => markAsRead(notification.id)}
-                                  >
-                                    <FiCheck size={12} />
-                                  </Button>
-                                )}
-                                <Button size="xs" variant="outline" colorScheme="gray">
-                                  <FiArchive size={12} />
-                                </Button>
-                                <Button size="xs" variant="outline" colorScheme="red">
-                                  <FiTrash2 size={12} />
-                                </Button>
-                              </HStack>
-                            </VStack>
-                          </HStack>
-
-                          {notification.actionText && (
-                            <HStack justify="flex-start" mt={2}>
-                              <Button size="sm" colorScheme="blue" variant="outline">
-                                {notification.actionText}
-                              </Button>
-                            </HStack>
-                          )}
-                        </VStack>
+        {/* Main Content */}
+        <Grid templateColumns={{ base: '1fr', lg: showPreferences ? '2fr 1fr' : '1fr' }} gap={8}>
+          {/* Notifications Feed */}
+          <VStack gap={6} align="stretch">
+            {/* Category Tabs */}
+            <Tabs.Root value={activeTab} onValueChange={(details) => setActiveTab(details.value)}>
+              <Flex wrap="wrap" gap={2}>
+                {tabs.map(tab => {
+                  const Icon = tab.icon;
+                  return (
+                    <Tabs.Trigger key={tab.id} value={tab.id}>
+                      <HStack gap={2}>
+                        <Icon size={16} />
+                        <Text>{tab.label}</Text>
+                        {tab.count > 0 && (
+                          <Badge 
+                            size="sm" 
+                            colorScheme={activeTab === tab.id ? 'blue' : 'gray'}
+                            variant={activeTab === tab.id ? 'solid' : 'outline'}
+                          >
+                            {tab.count}
+                          </Badge>
+                        )}
                       </HStack>
-                    </CardBody>
-                  </Card>
-                ))
-              )}
-            </VStack>
+                    </Tabs.Trigger>
+                  );
+                })}
+              </Flex>
 
-            {filteredNotifications.length > 0 && (
-              <HStack justify="center" mt={6}>
-                <Button variant="outline" size="sm">
-                  Load More Notifications
-                </Button>
-              </HStack>
-            )}
-          </CardBody>
-        </Card>
+              {/* Notifications Feed */}
+              <Box mt={6}>
+                {filteredNotifications.length > 0 ? (
+                  <VStack gap={4} align="stretch">
+                    {filteredNotifications.map(notification => (
+                      <NotificationCard
+                        key={notification.id}
+                        notification={notification}
+                        onMarkRead={handleMarkRead}
+                        onArchive={handleArchive}
+                        onDelete={handleDelete}
+                        onSilence={!isProvider ? handleSilence : undefined}
+                        onFollow={!isProvider ? handleFollow : undefined}
+                      />
+                    ))}
+                  </VStack>
+                ) : (
+                  <Card.Root p={8} textAlign="center">
+                    <Card.Body>
+                      <VStack gap={4}>
+                        <Box p={4} bg="gray.100" borderRadius="full">
+                          <FiBell size={32} color="#9CA3AF" />
+                        </Box>
+                        <VStack gap={2}>
+                          <Heading size="md" color="gray.600">No notifications found</Heading>
+                          <Text color="gray.500">
+                            {searchTerm ? 'Try adjusting your search terms' : 'All caught up! Check back later for updates.'}
+                          </Text>
+                        </VStack>
+                      </VStack>
+                    </Card.Body>
+                  </Card.Root>
+                )}
+              </Box>
+            </Tabs.Root>
+          </VStack>
 
-        {/* Notification Categories Overview */}
-        <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
-          <Card>
-            <CardHeader>
-              <Heading size="md">Recent Activity Summary</Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack gap={3} align="stretch">
-                <HStack justify="space-between" p={2} bg="blue.50" borderRadius="md">
-                  <HStack gap={2}>
-                    <FiSettings color="#3182ce" />
-                    <Text fontSize="sm" fontWeight="medium">System Updates</Text>
-                  </HStack>
-                  <Badge colorScheme="blue">2 new</Badge>
-                </HStack>
-
-                <HStack justify="space-between" p={2} bg="orange.50" borderRadius="md">
-                  <HStack gap={2}>
-                    <FiCalendar color="#dd6b20" />
-                    <Text fontSize="sm" fontWeight="medium">Upcoming Deadlines</Text>
-                  </HStack>
-                  <Badge colorScheme="orange">1 urgent</Badge>
-                </HStack>
-
-                <HStack justify="space-between" p={2} bg="green.50" borderRadius="md">
-                  <HStack gap={2}>
-                    <FiDollarSign color="#38a169" />
-                    <Text fontSize="sm" fontWeight="medium">Payment Activities</Text>
-                  </HStack>
-                  <Badge colorScheme="green">3 updates</Badge>
-                </HStack>
-
-                <HStack justify="space-between" p={2} bg="purple.50" borderRadius="md">
-                  <HStack gap={2}>
-                    <FiTarget color="#805ad5" />
-                    <Text fontSize="sm" fontWeight="medium">AI Recommendations</Text>
-                  </HStack>
-                  <Badge colorScheme="purple">2 matches</Badge>
-                </HStack>
-              </VStack>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <Heading size="md">Notification Settings</Heading>
-            </CardHeader>
-            <CardBody>
-              <VStack gap={4} align="stretch">
-                <Text fontSize="sm" color="gray.600" mb={2}>
-                  Customize which notifications you receive
-                </Text>
-                
-                <HStack justify="space-between">
-                  <Text fontSize="sm">🔹 System updates</Text>
-                  <Box w="40px" h="20px" bg="blue.500" borderRadius="full" />
-                </HStack>
-
-                <HStack justify="space-between">
-                  <Text fontSize="sm">🔹 Project deadlines</Text>
-                  <Box w="40px" h="20px" bg="blue.500" borderRadius="full" />
-                </HStack>
-
-                <HStack justify="space-between">
-                  <Text fontSize="sm">🔹 Payment alerts</Text>
-                  <Box w="40px" h="20px" bg="blue.500" borderRadius="full" />
-                </HStack>
-
-                <HStack justify="space-between">
-                  <Text fontSize="sm">🔹 AI suggestions</Text>
-                  <Box w="40px" h="20px" bg="gray.200" borderRadius="full" />
-                </HStack>
-
-                <Button size="sm" colorScheme="blue" mt={2}>
-                  Save Preferences
-                </Button>
-              </VStack>
-            </CardBody>
-          </Card>
+          {/* Preferences Panel */}
+          {showPreferences && (
+            <PreferencesPanel
+              preferences={preferences}
+              onPreferencesChange={setPreferences}
+              isProvider={isProvider}
+            />
+          )}
         </Grid>
       </VStack>
     </Container>

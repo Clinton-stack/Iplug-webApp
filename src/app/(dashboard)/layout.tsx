@@ -2,6 +2,8 @@
 import { RequestFormDialog } from '@/components/forms/CustomrequestModal';
 import Navbar from '@/components/Navbar';
 import AppSidebar from '@/components/SiderBar/SideBar';
+import { UserRoleProvider } from '@/contexts/UserRoleContext';
+import { Toaster } from '@/components/ui/toaster';
 import { Grid, GridItem, Box } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 
@@ -71,98 +73,103 @@ const Layout: React.FC<DashboardLayoutProps> = ({ children }) => {
   }
 
   return (
-    <Box minH="100vh" maxW="100vw" bg="#F5F5F5" position="relative" overflow="hidden">
-      {/* Mobile Overlay */}
-      {isMobile && mobileMenuOpen && (
-        <Box
-          position="fixed"
-          inset={0}
-          bg="rgba(0,0,0,0.5)"
-          zIndex={998}
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Layout Grid */}
-      <Grid
-        templateAreas={isMobile ? `"main"` : `"nav main"`}
-        gridTemplateColumns={isMobile ? '1fr' : `${sidebarWidth} 1fr`}
-        gridTemplateRows="100vh"
-        minH="100vh"
-        transition="grid-template-columns 0.3s ease"
-        gap={0}
-      >
-        {/* Sidebar - Fixed on desktop, overlay on mobile */}
-        {!isMobile && (
-          <GridItem area="nav" h="100vh" position="relative" zIndex={999}>
-            <AppSidebar 
-              collapsed={collapsed} 
-              setCollapsed={setCollapsed}
-              isMobile={isMobile}
-              mobileMenuOpen={mobileMenuOpen}
-              setMobileMenuOpen={setMobileMenuOpen}
-            />
-          </GridItem>
-        )}
-
-        {/* Mobile Sidebar Overlay */}
-        {isMobile && (
+    <UserRoleProvider>
+      <Box minH="100vh" maxW="100vw" bg="#F5F5F5" position="relative" overflow="hidden">
+        {/* Mobile Overlay */}
+        {isMobile && mobileMenuOpen && (
           <Box
             position="fixed"
-            left={mobileMenuOpen ? 0 : '-260px'}
-            top={0}
-            h="100vh"
-            w="260px"
-            zIndex={999}
-            transition="left 0.3s ease-in-out"
-          >
-            <AppSidebar 
-              collapsed={false} 
-              setCollapsed={setCollapsed}
-              isMobile={isMobile}
-              mobileMenuOpen={mobileMenuOpen}
-              setMobileMenuOpen={setMobileMenuOpen}
-            />
-          </Box>
+            inset={0}
+            bg="rgba(0,0,0,0.5)"
+            zIndex={998}
+            onClick={() => setMobileMenuOpen(false)}
+          />
         )}
 
-        {/* Main Area */}
-        <GridItem area="main" position="relative" h="100vh" overflow="hidden">
-          {/* Fixed Navbar */}
-          <Box
-            position="sticky"
-            top="0"
-            left="0"
-            right="0"
-            height={navbarHeight}
-            bg="#F8FAFB"
-            zIndex="997"
-            boxShadow="0 2px 4px rgba(0,0,0,0.1)"
-            borderBottom="1px solid #E2E8F0"
-          >
-            <Navbar 
-              isMobile={isMobile}
-              mobileMenuOpen={mobileMenuOpen}
-              setMobileMenuOpen={setMobileMenuOpen}
-            />
-          </Box>
+        {/* Layout Grid */}
+        <Grid
+          templateAreas={isMobile ? `"main"` : `"nav main"`}
+          gridTemplateColumns={isMobile ? '1fr' : `${sidebarWidth} 1fr`}
+          gridTemplateRows="100vh"
+          minH="100vh"
+          transition="grid-template-columns 0.3s ease"
+          gap={0}
+        >
+          {/* Sidebar - Fixed on desktop, overlay on mobile */}
+          {!isMobile && (
+            <GridItem area="nav" h="100vh" position="relative" zIndex={999}>
+              <AppSidebar 
+                collapsed={collapsed} 
+                setCollapsed={setCollapsed}
+                isMobile={isMobile}
+                mobileMenuOpen={mobileMenuOpen}
+                setMobileMenuOpen={setMobileMenuOpen}
+              />
+            </GridItem>
+          )}
 
-          {/* Scrollable content below the navbar */}
-          <Box 
-            h={`calc(100vh - ${navbarHeight})`}
-            overflowY="auto" 
-            overflowX="hidden"
-            position="relative"
-            px={isMobile ? 2 : 0}
-          >
-            <RequestFormDialog />
-            <Box p={0}>
-              {children}
+          {/* Mobile Sidebar Overlay */}
+          {isMobile && (
+            <Box
+              position="fixed"
+              left={mobileMenuOpen ? 0 : '-260px'}
+              top={0}
+              h="100vh"
+              w="260px"
+              zIndex={999}
+              transition="left 0.3s ease-in-out"
+            >
+              <AppSidebar 
+                collapsed={false} 
+                setCollapsed={setCollapsed}
+                isMobile={isMobile}
+                mobileMenuOpen={mobileMenuOpen}
+                setMobileMenuOpen={setMobileMenuOpen}
+              />
             </Box>
-          </Box>
-        </GridItem>
-      </Grid>
-    </Box>
+          )}
+
+          {/* Main Area */}
+          <GridItem area="main" position="relative" h="100vh" overflow="hidden">
+            {/* Fixed Navbar */}
+            <Box
+              position="sticky"
+              top="0"
+              left="0"
+              right="0"
+              height={navbarHeight}
+              bg="#F8FAFB"
+              zIndex="997"
+              boxShadow="0 2px 4px rgba(0,0,0,0.1)"
+              borderBottom="1px solid #E2E8F0"
+            >
+              <Navbar 
+                isMobile={isMobile}
+                mobileMenuOpen={mobileMenuOpen}
+                setMobileMenuOpen={setMobileMenuOpen}
+              />
+            </Box>
+
+            {/* Scrollable content below the navbar */}
+            <Box 
+              h={`calc(100vh - ${navbarHeight})`}
+              overflowY="auto" 
+              overflowX="hidden"
+              position="relative"
+              px={isMobile ? 2 : 0}
+            >
+              <RequestFormDialog />
+              <Box p={0}>
+                {children}
+              </Box>
+            </Box>
+          </GridItem>
+        </Grid>
+        
+        {/* Toast Notifications */}
+        <Toaster />
+      </Box>
+    </UserRoleProvider>
   );
 };
 

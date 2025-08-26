@@ -124,7 +124,7 @@ const NetworkPage: React.FC = () => {
     {
       id: '1',
       name: 'Sarah Johnson',
-      avatar: '/api/placeholder/40/40',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b586?w=40&h=40&fit=crop&crop=face',
       role: 'UI/UX Designer',
       level: 1,
       connectionType: 'completed_job',
@@ -138,7 +138,7 @@ const NetworkPage: React.FC = () => {
     {
       id: '2',
       name: 'Michael Chen',
-      avatar: '/api/placeholder/40/40',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
       role: 'Full Stack Developer',
       level: 1,
       connectionType: 'collaboration',
@@ -152,7 +152,7 @@ const NetworkPage: React.FC = () => {
     {
       id: '3',
       name: 'David Wilson',
-      avatar: '/api/placeholder/40/40',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face',
       role: 'Mobile Developer',
       level: 2,
       connectionType: 'referral',
@@ -166,7 +166,7 @@ const NetworkPage: React.FC = () => {
     {
       id: '4',
       name: 'Emma Davis',
-      avatar: '/api/placeholder/40/40',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
       role: 'Content Writer',
       level: 2,
       connectionType: 'mutual_connection',
@@ -180,7 +180,7 @@ const NetworkPage: React.FC = () => {
     {
       id: '5',
       name: 'James Rodriguez',
-      avatar: '/api/placeholder/40/40',
+      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=40&h=40&fit=crop&crop=face',
       role: 'Graphic Designer',
       level: 3,
       connectionType: 'mutual_connection',
