@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Mulish } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 import { Provider } from "@/components/ui/provider";
 import ClientOnly from "@/components/ClientOnly";
@@ -79,9 +80,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
               flexDirection: 'column',
               zIndex: 9999
             }}>
-              <img 
+              <Image 
                 src="/images/IngeniousplugLogo.png" 
                 alt="Ingenious Plug Logo" 
+                width={250}
+                height={100}
                 style={{ 
                   maxHeight: '100px', 
                   maxWidth: '250px', 
