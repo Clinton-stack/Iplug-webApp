@@ -69,8 +69,8 @@ export default function DashboardNotFound() {
             maxW="md"
             lineHeight="relaxed"
           >
-            The dashboard page you're looking for doesn't exist. 
-            Let's get you back to managing your services and projects.
+            The dashboard page you&apos;re looking for doesn&apos;t exist. 
+            Let&apos;s get you back to managing your services and projects.
           </Text>
         </VStack>
 

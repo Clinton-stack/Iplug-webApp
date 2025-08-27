@@ -472,7 +472,7 @@ const AllServicesPage: React.FC = () => {
               </Text>
               {searchTerm && (
                 <Text fontSize="sm" color="gray.500">
-                  Searching for: "{searchTerm}"
+                  Searching for: &ldquo;{searchTerm}&rdquo;
                   <Button
                     variant="ghost"
                     size="sm"

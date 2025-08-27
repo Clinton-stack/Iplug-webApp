@@ -940,8 +940,8 @@ const MyNetworkPage = () => {
                           </Box>
                         </HStack>
                         <Text>
-                          "Exceptional work on the mobile app redesign. Sarah delivered beyond expectations 
-                          with creative solutions and timely communication throughout the project."
+                          &ldquo;Exceptional work on the mobile app redesign. Sarah delivered beyond expectations 
+                          with creative solutions and timely communication throughout the project.&rdquo;
                         </Text>
                         <HStack>
                           <Badge colorScheme="green">5 Star Rating</Badge>

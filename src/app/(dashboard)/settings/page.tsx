@@ -591,7 +591,7 @@ export default function SettingsPage() {
             <HStack justify="space-between">
               <VStack align="start" gap={1}>
                 <Text fontSize="sm" fontWeight="medium">Show Online Status</Text>
-                <Text fontSize="xs" color="gray.600">Let others see when you're active</Text>
+                <Text fontSize="xs" color="gray.600">Let others see when you&apos;re active</Text>
               </VStack>
               <ToggleSwitch
                 isChecked={privacySettings.showOnlineStatus}
@@ -711,7 +711,7 @@ export default function SettingsPage() {
                 <FiMail size={24} color="#38a169" style={{ margin: '0 auto 8px' }} />
                 <Text fontWeight="medium" mb={2}>Email Support</Text>
                 <Text fontSize="sm" color="gray.600" mb={3}>
-                  Send us an email and we'll respond within 24h
+                  Send us an email and we&apos;ll respond within 24h
                 </Text>
                 <Button size="sm" colorScheme="green">Send Email</Button>
               </CardBody>
@@ -750,7 +750,7 @@ export default function SettingsPage() {
                 <Text fontSize="sm" fontWeight="medium">How Dispute Resolution Works</Text>
               </HStack>
               <Text fontSize="xs" color="gray.600" lineHeight="1.5">
-                Our mediation team reviews disputes impartially. We'll help both parties reach 
+                Our mediation team reviews disputes impartially. We&apos;ll help both parties reach 
                 a fair resolution while protecting funds in escrow.
               </Text>
             </Box>

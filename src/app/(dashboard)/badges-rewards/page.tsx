@@ -129,7 +129,7 @@ const BadgesRewardsPage: React.FC = () => {
       id: 'top-earner',
       name: 'Top Earner',
       description: 'Earn ₦100,000+ in a single month',
-      icon: FiTrophy,
+      icon: FaTrophy,
       color: 'purple.500',
       earned: false,
       category: 'performance',
@@ -578,7 +578,7 @@ const BadgesRewardsPage: React.FC = () => {
             {activeSection === 'leaderboards' && (
               <VStack gap={6} align="stretch">
                 <Text fontSize="lg" fontWeight="semibold" color="purple.600">
-                  🔹 Top Categories & "Top Plug of the Month"
+                  🔹 Top Categories &amp; &ldquo;Top Plug of the Month&rdquo;
                 </Text>
 
                 <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }} gap={6}>
@@ -688,7 +688,7 @@ const BadgesRewardsPage: React.FC = () => {
 
                 <Card>
                   <CardHeader>
-                    <Heading size="md">🏆 "Top Plug of the Month" Award</Heading>
+                    <Heading size="md">🏆 &ldquo;Top Plug of the Month&rdquo; Award</Heading>
                   </CardHeader>
                   <CardBody>
                     <VStack gap={4}>
@@ -698,7 +698,7 @@ const BadgesRewardsPage: React.FC = () => {
                           Congratulations!
                         </Text>
                         <Text fontSize="lg" color="purple.600" mb={1}>
-                          You're currently ranked #3
+                          You&apos;re currently ranked #3
                         </Text>
                         <Text fontSize="sm" color="gray.600">
                           Keep up the great work to reach the top spot!
@@ -706,7 +706,7 @@ const BadgesRewardsPage: React.FC = () => {
                       </Box>
                       
                       <Text fontSize="sm" color="gray.600" textAlign="center">
-                        The "Top Plug of the Month" receives a special badge, ₦5,000 bonus, and featured placement on the platform.
+                        The &ldquo;Top Plug of the Month&rdquo; receives a special badge, ₦5,000 bonus, and featured placement on the platform.
                       </Text>
                     </VStack>
                   </CardBody>

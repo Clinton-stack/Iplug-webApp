@@ -184,7 +184,7 @@ const CreateRequestModal: React.FC<CreateRequestModalProps> = ({ isOpen, onClose
 
             <Box p={4} bg="gray.50" borderRadius="lg">
               <Text fontSize="sm" color="gray.700">
-                📋 By submitting this request, you'll be able to:
+                📋 By submitting this request, you&apos;ll be able to:
               </Text>
               <VStack align="start" mt={2} fontSize="sm" color="gray.600">
                 <Text>• Receive proposals from qualified providers</Text>

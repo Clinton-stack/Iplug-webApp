@@ -74,7 +74,7 @@ class ErrorBoundary extends Component<Props, State> {
               
               <Text color="gray.500" fontSize="lg" mb={6} lineHeight="1.6">
                 We encountered an unexpected error while loading this page. 
-                Don't worry, your data is safe and this issue has been logged for review.
+                Don&apos;t worry, your data is safe and this issue has been logged for review.
               </Text>
 
               <VStack gap={3} align="center" mb={6}>

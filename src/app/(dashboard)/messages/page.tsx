@@ -11,8 +11,8 @@ import {
   Button,
   Image,
   HStack,
+  VStack,
   Badge,
-  Stack,
 } from '@chakra-ui/react';
 import { 
   FiPaperclip, 
@@ -246,7 +246,7 @@ const Messages = () => {
           </Box>
 
           {/* Chat List */}
-          <Stack gap={0}>
+          <VStack>
             {filteredChats.map((chat) => (
               <Box
                 key={chat.id}
@@ -287,7 +287,7 @@ const Messages = () => {
                         />
                       )}
                     </Box>
-                    <Stack gap={1} flex="1" minW={0}>
+                    <VStack flex="1" minW={0}>
                       <HStack w="full" justify="space-between">
                         <Text fontWeight="semibold" fontSize="sm" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
                           {chat.participantName}
@@ -303,9 +303,9 @@ const Messages = () => {
                       <Text fontSize="xs" color="gray.600" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
                         {chat.lastMessage}
                       </Text>
-                    </Stack>
+                    </VStack>
                   </HStack>
-                  <Stack align="end" gap={1}>
+                  <VStack align="end">
                     <Text fontSize="xs" color="gray.500">
                       {formatTimeAgo(chat.lastMessageTime)}
                     </Text>
@@ -314,11 +314,11 @@ const Messages = () => {
                         {chat.unreadCount}
                       </Badge>
                     )}
-                  </Stack>
+                  </VStack>
                 </HStack>
               </Box>
             ))}
-          </Stack>
+          </VStack>
         </GridItem>
 
         {/* Chat Area */}
@@ -351,7 +351,7 @@ const Messages = () => {
                   >
                     {currentChat?.participantName?.split(' ').map(n => n[0]).join('')}
                   </Box>
-                  <Stack gap={0} align="start">
+                  <VStack align="start">
                     <Text fontWeight="semibold" fontSize="sm">
                       {currentChat?.participantName}
                     </Text>
@@ -366,7 +366,7 @@ const Messages = () => {
                         {currentChat?.isOnline ? 'Online' : 'Offline'}
                       </Text>
                     </HStack>
-                  </Stack>
+                  </VStack>
                 </HStack>
                 <HStack gap={2}>
                   <Button
@@ -404,7 +404,7 @@ const Messages = () => {
 
               {/* Messages Area */}
               <Box flex="1" overflowY="auto" p={4} bg="#F8FAFB">
-                <Stack align="stretch" gap={4}>
+                <VStack align="stretch">
                   {messages.map((message) => (
                     <MessageBubble
                       key={message.id}
@@ -413,7 +413,7 @@ const Messages = () => {
                     />
                   ))}
                   <div ref={messagesEndRef} />
-                </Stack>
+                </VStack>
               </Box>
 
               {/* Recording Indicator */}
@@ -567,10 +567,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
         return (
           <HStack gap={3} p={3} bg="gray.50" borderRadius="md" minW="200px">
             <FiFile size={24} />
-            <Stack align="start" flex="1" gap={0}>
+            <VStack align="start" flex="1">
               <Text fontSize="sm" fontWeight="medium">{message.fileName}</Text>
               <Text fontSize="xs" color="gray.600">{message.fileSize}</Text>
-            </Stack>
+            </VStack>
             <Button
               size="sm"
               variant="ghost"
@@ -597,7 +597,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
             >
               {isPlaying ? <FiPause size={16} /> : <FiPlay size={16} />}
             </Button>
-            <Stack align="start" flex="1" gap={0}>
+            <VStack align="start" flex="1">
               <Text fontSize="sm">Voice message</Text>
               <Box w="full" h="1" bg="gray.300" borderRadius="full" position="relative">
                 <Box
@@ -608,7 +608,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
                   transition="width 0.3s"
                 />
               </Box>
-            </Stack>
+            </VStack>
             <Text fontSize="xs" color="gray.600">0:15</Text>
           </HStack>
         );
@@ -642,9 +642,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
           {message.senderName?.split(' ').map(n => n[0]).join('') || 'U'}
         </Box>
       )}
-      <Stack
+      <VStack
         align={isOwn ? "end" : "start"}
-        gap={1}
         maxW="70%"
       >
         <Box
@@ -662,7 +661,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
         <Text fontSize="xs" color="gray.500">
           {formatTime(message.timestamp)}
         </Text>
-      </Stack>
+      </VStack>
       {isOwn && (
         <Box
           w="24px"

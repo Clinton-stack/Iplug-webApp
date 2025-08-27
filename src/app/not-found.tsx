@@ -55,8 +55,8 @@ export default function NotFound() {
             color="gray.600"
             lineHeight="tall"
           >
-            The page you're looking for doesn't exist or has been moved. 
-            Don't worry, let's get you back on track to find the services you need.
+            The page you&apos;re looking for doesn&apos;t exist or has been moved. 
+            Don&apos;t worry, let&apos;s get you back on track to find the services you need.
           </Text>
         </VStack>
 
